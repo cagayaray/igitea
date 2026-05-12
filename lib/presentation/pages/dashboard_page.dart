@@ -84,18 +84,9 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           FadeInWrapper(child: _WelcomeCard(user: user)),
           const SizedBox(height: UIConstants.md),
-          FadeInWrapper(
-            delay: const Duration(milliseconds: 100),
-            child: Text(
-              l10n.quickActions,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          const SizedBox(height: UIConstants.sm),
-          FadeInWrapper(
-            delay: const Duration(milliseconds: 150),
+          _CollapsibleSection(
+            title: l10n.quickActions,
+            initiallyExpanded: true,
             child: _QuickActions(l10n: l10n, user: user),
           ),
           const SizedBox(height: UIConstants.md),
@@ -241,6 +232,108 @@ class _RepoSummary extends StatelessWidget {
           }).toList(),
         );
       },
+    );
+  }
+}
+
+class _CollapsibleSection extends StatefulWidget {
+  final String title;
+  final Widget child;
+  final bool initiallyExpanded;
+
+  const _CollapsibleSection({
+    required this.title,
+    required this.child,
+    this.initiallyExpanded = true,
+  });
+
+  @override
+  State<_CollapsibleSection> createState() => _CollapsibleSectionState();
+}
+
+class _CollapsibleSectionState extends State<_CollapsibleSection>
+    with SingleTickerProviderStateMixin {
+  late bool _expanded;
+  late AnimationController _controller;
+  late Animation<double> _heightFactor;
+
+  @override
+  void initState() {
+    super.initState();
+    _expanded = widget.initiallyExpanded;
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 250),
+      vsync: this,
+    );
+    _heightFactor = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+    if (_expanded) _controller.value = 1.0;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _toggle() {
+    setState(() => _expanded = !_expanded);
+    if (_expanded) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: theme.colorScheme.outlineVariant),
+      ),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: _toggle,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.title,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
+                  AnimatedRotation(
+                    turns: _expanded ? 0.5 : 0.0,
+                    duration: const Duration(milliseconds: 200),
+                    child: Icon(Icons.expand_more, color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          ClipRect(
+            child: AnimatedBuilder(
+              animation: _heightFactor,
+              builder: (context, child) => Align(
+                heightFactor: _heightFactor.value,
+                child: child,
+              ),
+              child: _expanded ? widget.child : const SizedBox.shrink(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -716,5 +716,19 @@
   "recentActivitySubtitle": "查看最近的动态",
   "yourStarredRepos": "你收藏的仓库",
   "yourOrganizations": "你的组织",
-  "loadMoreActivity": "加载更多动态"
+  "loadMoreActivity": "加载更多动态",
+  "filters": "筛选",
+  "labels": "标签",
+  "milestones": "里程碑",
+  "type": "类型",
+  "issues": "Issues",
+  "pullRequests": "Pull Requests",
+  "assignedToMe": "分配给我",
+  "createdByMe": "我创建的",
+  "mentionedMe": "提及我的",
+  "reset": "重置",
+  "apply": "应用",
+  "moreFilters": "更多筛选",
+  "noLabelsAvailable": "暂无标签",
+  "noMilestonesAvailable": "暂无里程碑"
 }

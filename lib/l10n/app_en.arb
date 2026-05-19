@@ -726,5 +726,19 @@
   "recentActivitySubtitle": "Track your recent activity",
   "yourStarredRepos": "Your starred repositories",
   "yourOrganizations": "Your organizations",
-  "loadMoreActivity": "Load more activity"
+  "loadMoreActivity": "Load more activity",
+  "filters": "Filters",
+  "labels": "Labels",
+  "milestones": "Milestones",
+  "type": "Type",
+  "issues": "Issues",
+  "pullRequests": "Pull Requests",
+  "assignedToMe": "Assigned to me",
+  "createdByMe": "Created by me",
+  "mentionedMe": "Mentioned me",
+  "reset": "Reset",
+  "apply": "Apply",
+  "moreFilters": "More filters",
+  "noLabelsAvailable": "No labels available",
+  "noMilestonesAvailable": "No milestones available"
 }

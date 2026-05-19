@@ -38,7 +38,8 @@ A cross-platform Flutter client for [Gitea](https://gitea.io), built from the Op
 - **Repository topics**: view and edit topics via dialog
 
 ### Issues & Pull Requests
-- List, search, filter issues and PRs
+- List, search, and **advanced filter** issues and PRs (labels, milestones, type, assignee, created by me, mentioned me)
+- Touch-friendly filter BottomSheet with apply/reset actions, active filters shown as deletable chips
 - Detail pages with Markdown body, state badges, author avatars, labels
 - Comments with Markdown rendering
 - Create issues: title, body, label selection, milestone selection

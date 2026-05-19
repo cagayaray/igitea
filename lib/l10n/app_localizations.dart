@@ -4456,6 +4456,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Load more activity'**
   String get loadMoreActivity;
+
+  /// No description provided for @filters.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get filters;
+
+  /// No description provided for @type.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get type;
+
+  /// No description provided for @assignedToMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned to me'**
+  String get assignedToMe;
+
+  /// No description provided for @createdByMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Created by me'**
+  String get createdByMe;
+
+  /// No description provided for @mentionedMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Mentioned me'**
+  String get mentionedMe;
+
+  /// No description provided for @reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
+
+  /// No description provided for @apply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get apply;
+
+  /// No description provided for @moreFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'More filters'**
+  String get moreFilters;
+
+  /// No description provided for @noLabelsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No labels available'**
+  String get noLabelsAvailable;
+
+  /// No description provided for @noMilestonesAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No milestones available'**
+  String get noMilestonesAvailable;
 }
 
 class _AppLocalizationsDelegate

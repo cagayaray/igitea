@@ -2277,4 +2277,34 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get loadMoreActivity => 'Charger plus d\'activité';
+
+  @override
+  String get filters => 'Filters';
+
+  @override
+  String get type => 'Type';
+
+  @override
+  String get assignedToMe => 'Assigned to me';
+
+  @override
+  String get createdByMe => 'Created by me';
+
+  @override
+  String get mentionedMe => 'Mentioned me';
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get moreFilters => 'More filters';
+
+  @override
+  String get noLabelsAvailable => 'No labels available';
+
+  @override
+  String get noMilestonesAvailable => 'No milestones available';
 }

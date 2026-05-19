@@ -4,6 +4,7 @@ import '../../core/errors/failures.dart';
 import '../../core/utils/either.dart';
 import '../../data/models/generated/generated_models.dart';
 import '../../domain/usecases/issue_usecases.dart';
+import '../models/issue_filter_state.dart';
 
 sealed class IssueState {
   const IssueState();
@@ -118,6 +119,9 @@ class IssueNotifier extends ChangeNotifier {
   String? lastSearchQuery;
   String? _issuesListFilter;
   String? get issuesListFilter => _issuesListFilter;
+
+  IssueFilterState _filterState = const IssueFilterState();
+  IssueFilterState get filterState => _filterState;
 
   static const _pageSize = 20;
   int _currentPage = 1;
@@ -483,11 +487,10 @@ _listMilestonesUseCase = listMilestonesUseCase;
   Future<void> searchIssues(
     String query, {
     String? state,
-    String? labels,
-    String? milestones,
-    bool? assigned,
+    IssueFilterState? filters,
   }) async {
     _issuesListFilter = state;
+    _filterState = filters ?? const IssueFilterState();
     _currentPage = 1;
     _issuesListState = const IssuesListLoading();
     notifyListeners();
@@ -497,9 +500,12 @@ _listMilestonesUseCase = listMilestonesUseCase;
       SearchIssuesParams(
         q: query.isEmpty ? null : query,
         state: state,
-        labels: labels,
-        milestones: milestones,
-        assigned: assigned,
+        labels: _filterState.labelsParam,
+        milestones: _filterState.milestonesParam,
+        type: _filterState.type,
+        assigned: _filterState.assignedToMe ? true : null,
+        created: _filterState.createdByMe ? true : null,
+        mentioned: _filterState.mentionedMe ? true : null,
         page: _currentPage,
         limit: _pageSize,
       ),
@@ -529,6 +535,12 @@ _listMilestonesUseCase = listMilestonesUseCase;
       SearchIssuesParams(
         q: lastSearchQuery?.isEmpty ?? true ? null : lastSearchQuery,
         state: _issuesListFilter,
+        labels: _filterState.labelsParam,
+        milestones: _filterState.milestonesParam,
+        type: _filterState.type,
+        assigned: _filterState.assignedToMe ? true : null,
+        created: _filterState.createdByMe ? true : null,
+        mentioned: _filterState.mentionedMe ? true : null,
         page: _currentPage,
         limit: _pageSize,
       ),

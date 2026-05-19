@@ -10,10 +10,13 @@ import '../../core/utils/either.dart';
 import '../../data/models/generated/generated_models.dart';
 import '../../domain/usecases/issue_usecases.dart';
 import '../../domain/usecases/repo_usecases.dart';
+import '../../domain/entities/auth_state.dart';
 import '../../domain/entities/issue_state.dart';
 import '../../l10n/app_localizations.dart';
 import '../state/repo_notifier.dart';
 import '../state/issue_notifier.dart';
+import '../models/issue_filter_state.dart';
+import '../widgets/issue_filter_bottom_sheet.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/premium_card.dart';
 import '../widgets/user_avatar.dart';
@@ -1006,10 +1009,31 @@ class _IssuesTab extends StatefulWidget {
 
 class _IssuesTabState extends State<_IssuesTab> {
   String _selectedFilter = 'open';
+  final ValueNotifier<IssueFilterState> _filterState = ValueNotifier(const IssueFilterState());
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+  bool _isFilterSheetOpen = false;
 
   void _loadIssues() {
+    final authState = Injection.authNotifier.state;
+    String? currentUsername;
+    if (authState is AuthAuthenticated) {
+      currentUsername = authState.user.login;
+    }
+
     Injection.issueNotifier.listIssues(
-      ListIssuesParams(owner: widget.owner, repo: widget.repo, state: _selectedFilter),
+      ListIssuesParams(
+        owner: widget.owner,
+        repo: widget.repo,
+        state: _selectedFilter,
+        q: _searchQuery.isEmpty ? null : _searchQuery,
+        labels: _filterState.value.labelsParam,
+        milestones: _filterState.value.milestonesParam,
+        type: _filterState.value.type,
+        assigned_by: _filterState.value.assignedToMe ? currentUsername : null,
+        created_by: _filterState.value.createdByMe ? currentUsername : null,
+        mentioned_by: _filterState.value.mentionedMe ? currentUsername : null,
+      ),
     );
   }
 
@@ -1022,10 +1046,56 @@ class _IssuesTabState extends State<_IssuesTab> {
     return false;
   }
 
+  Future<void> _showFilterSheet() async {
+    if (_isFilterSheetOpen) return;
+    _isFilterSheetOpen = true;
+
+    try {
+      await Injection.issueNotifier.listLabels(widget.owner, widget.repo);
+      await Injection.issueNotifier.listMilestones(widget.owner, widget.repo);
+
+      final labels = <String>[];
+      final milestones = <String>[];
+
+      final state = Injection.issueNotifier.state;
+      if (state is LabelsLoaded) {
+        labels.addAll(state.labels.map((l) => l.name ?? '').where((n) => n.isNotEmpty));
+      }
+      if (state is MilestonesLoaded) {
+        milestones.addAll(state.milestones.map((m) => m.title ?? '').where((t) => t.isNotEmpty));
+      }
+
+      if (!mounted) return;
+
+      final result = await showModalBottomSheet<IssueFilterState>(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) => IssueFilterBottomSheet(
+          initialState: _filterState.value,
+          availableLabels: labels,
+          availableMilestones: milestones,
+        ),
+      );
+
+      if (result != null) {
+        _filterState.value = result;
+        _loadIssues();
+      }
+    } finally {
+      _isFilterSheetOpen = false;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadIssues());
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -1040,33 +1110,138 @@ class _IssuesTabState extends State<_IssuesTab> {
               children: [
                 Padding(
                   padding: UIConstants.pagePadding + const EdgeInsets.only(top: UIConstants.sm),
-                  child: Row(
+                  child: Column(
                     children: [
-                      FilterChip(
-                        label: Text(widget.l10n.open),
-                        selected: _selectedFilter == 'open',
-                        onSelected: (_) => setState(() {
-                          _selectedFilter = 'open';
-                          _loadIssues();
-                        }),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: SearchBar(
+                              controller: _searchController,
+                              hintText: widget.l10n.searchIssues,
+                              leading: const Icon(Icons.search),
+                              trailing: [
+                                if (_searchQuery.isNotEmpty)
+                                  IconButton(
+                                    icon: const Icon(Icons.clear),
+                                    onPressed: () {
+                                      _searchController.clear();
+                                      setState(() => _searchQuery = '');
+                                      _loadIssues();
+                                    },
+                                  ),
+                              ],
+                              onChanged: (query) {
+                                setState(() => _searchQuery = query);
+                                _loadIssues();
+                              },
+                              padding: const WidgetStatePropertyAll(
+                                EdgeInsets.symmetric(horizontal: UIConstants.md),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: UIConstants.sm),
+                          IconButton(
+                            icon: const Icon(Icons.filter_list),
+                            tooltip: widget.l10n.moreFilters,
+                            onPressed: _showFilterSheet,
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: UIConstants.sm),
-                      FilterChip(
-                        label: Text(widget.l10n.closed),
-                        selected: _selectedFilter == 'closed',
-                        onSelected: (_) => setState(() {
-                          _selectedFilter = 'closed';
-                          _loadIssues();
-                        }),
+                      const SizedBox(height: UIConstants.sm),
+                      Row(
+                        children: [
+                          FilterChip(
+                            label: Text(widget.l10n.open),
+                            selected: _selectedFilter == 'open',
+                            onSelected: (_) => setState(() {
+                              _selectedFilter = 'open';
+                              _loadIssues();
+                            }),
+                          ),
+                          const SizedBox(width: UIConstants.sm),
+                          FilterChip(
+                            label: Text(widget.l10n.closed),
+                            selected: _selectedFilter == 'closed',
+                            onSelected: (_) => setState(() {
+                              _selectedFilter = 'closed';
+                              _loadIssues();
+                            }),
+                          ),
+                          const SizedBox(width: UIConstants.sm),
+                          FilterChip(
+                            label: Text(widget.l10n.all),
+                            selected: _selectedFilter == 'all',
+                            onSelected: (_) => setState(() {
+                              _selectedFilter = 'all';
+                              _loadIssues();
+                            }),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: UIConstants.sm),
-                      FilterChip(
-                        label: Text(widget.l10n.all),
-                        selected: _selectedFilter == 'all',
-                        onSelected: (_) => setState(() {
-                          _selectedFilter = 'all';
-                          _loadIssues();
-                        }),
+                      ValueListenableBuilder<IssueFilterState>(
+                        valueListenable: _filterState,
+                        builder: (context, filter, _) {
+                          if (!filter.hasFilters) return const SizedBox.shrink();
+                          return Padding(
+                            padding: const EdgeInsets.only(top: UIConstants.sm),
+                            child: Wrap(
+                              spacing: UIConstants.sm,
+                              runSpacing: UIConstants.sm,
+                              children: [
+                                ...filter.labels.map((label) => Chip(
+                                  label: Text(label),
+                                  onDeleted: () {
+                                    _filterState.value = filter.copyWith(
+                                      labels: filter.labels.difference({label}),
+                                    );
+                                    _loadIssues();
+                                  },
+                                )),
+                                ...filter.milestones.map((m) => Chip(
+                                  label: Text(m),
+                                  onDeleted: () {
+                                    _filterState.value = filter.copyWith(
+                                      milestones: filter.milestones.difference({m}),
+                                    );
+                                    _loadIssues();
+                                  },
+                                )),
+                                if (filter.type != null)
+                                  Chip(
+                                    label: Text(filter.type!),
+                                    onDeleted: () {
+                                      _filterState.value = filter.copyWith(clearType: true);
+                                      _loadIssues();
+                                    },
+                                  ),
+                                if (filter.assignedToMe)
+                                  Chip(
+                                    label: Text(widget.l10n.assignedToMe),
+                                    onDeleted: () {
+                                      _filterState.value = filter.copyWith(assignedToMe: false);
+                                      _loadIssues();
+                                    },
+                                  ),
+                                if (filter.createdByMe)
+                                  Chip(
+                                    label: Text(widget.l10n.createdByMe),
+                                    onDeleted: () {
+                                      _filterState.value = filter.copyWith(createdByMe: false);
+                                      _loadIssues();
+                                    },
+                                  ),
+                                if (filter.mentionedMe)
+                                  Chip(
+                                    label: Text(widget.l10n.mentionedMe),
+                                    onDeleted: () {
+                                      _filterState.value = filter.copyWith(mentionedMe: false);
+                                      _loadIssues();
+                                    },
+                                  ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

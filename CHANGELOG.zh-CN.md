@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Added
+- **Issue List 高级筛选**：标签、里程碑、类型、指派给我、我创建的、提及我的
+  - 触屏友好的 BottomSheet 交互，支持拖拽关闭、应用/重置按钮
+  - 已应用的筛选器以可删除 Chip 形式显示在列表上方
+  - 仓库 Issues Tab：新增 SearchBar 支持文本搜索
+- **筛选对话框防重复弹出**：防止同时打开多个 BottomSheet
+
 ## [0.33.0] - 2026-05-11
 
 ### Added

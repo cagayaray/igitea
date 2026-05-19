@@ -6,7 +6,9 @@ import '../../data/models/generated/generated_models.dart';
 import '../../domain/entities/issue_state.dart';
 import '../../l10n/app_localizations.dart';
 import '../../presentation/state/issue_notifier.dart';
+import '../models/issue_filter_state.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/issue_filter_bottom_sheet.dart';
 import '../widgets/premium_card.dart';
 import '../widgets/user_avatar.dart';
 import 'issue_detail_page.dart';
@@ -26,10 +28,12 @@ class _IssueListPageState extends State<IssueListPage> {
   String _searchQuery = '';
   final _searchController = TextEditingController();
   bool _isNavigating = false;
+  bool _isFilterSheetOpen = false;
   final SavedFilterService _savedFilterService = SavedFilterService();
   List<SavedFilter> _savedFilters = [];
   bool _savedFiltersExpanded = false;
   bool _filtersLoaded = false;
+  final ValueNotifier<IssueFilterState> _filterState = ValueNotifier(const IssueFilterState());
 
   @override
   void initState() {
@@ -37,11 +41,7 @@ class _IssueListPageState extends State<IssueListPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final notifier = Injection.issueNotifier;
       if (notifier.issuesListState is! IssuesListLoaded) {
-        if (widget.initialFilter == 'assigned') {
-          notifier.searchIssues('', assigned: true);
-        } else {
-          notifier.searchIssues('', state: notifier.issuesListFilter ?? 'open');
-        }
+        notifier.searchIssues('', state: notifier.issuesListFilter ?? 'open');
       }
     });
     _loadSavedFilters();
@@ -55,10 +55,52 @@ class _IssueListPageState extends State<IssueListPage> {
 
   void _forceReload() {
     final notifier = Injection.issueNotifier;
-    if (widget.initialFilter == 'assigned') {
-      notifier.searchIssues(_searchQuery, assigned: true);
-    } else {
-      notifier.searchIssues(_searchQuery, state: notifier.issuesListFilter ?? 'open');
+    notifier.searchIssues(
+      _searchQuery,
+      state: notifier.issuesListFilter ?? 'open',
+      filters: _filterState.value,
+    );
+  }
+
+  Future<void> _showFilterSheet() async {
+    if (_isFilterSheetOpen) return;
+    _isFilterSheetOpen = true;
+
+    final notifier = Injection.issueNotifier;
+    final issuesState = notifier.issuesListState;
+
+    final Set<String> labels = {};
+    final Set<String> milestones = {};
+    if (issuesState is IssuesListLoaded) {
+      for (final issue in issuesState.issues) {
+        if (issue.labels != null) {
+          for (final label in issue.labels!) {
+            if (label.name != null) labels.add(label.name!);
+          }
+        }
+        if (issue.milestone?.title != null) {
+          milestones.add(issue.milestone!.title!);
+        }
+      }
+    }
+
+    try {
+      final result = await showModalBottomSheet<IssueFilterState>(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) => IssueFilterBottomSheet(
+          initialState: _filterState.value,
+          availableLabels: labels.toList()..sort(),
+          availableMilestones: milestones.toList()..sort(),
+        ),
+      );
+
+      if (result != null) {
+        _filterState.value = result;
+        _forceReload();
+      }
+    } finally {
+      _isFilterSheetOpen = false;
     }
   }
 
@@ -162,19 +204,97 @@ class _IssueListPageState extends State<IssueListPage> {
           FadeInWrapper(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: UIConstants.md, vertical: UIConstants.sm),
-              child: _FilterChips(
-                selectedState: Injection.issueNotifier.issuesListFilter ?? 'open',
-                onSelected: (state) {
-                  setState(() {});
-                  Injection.issueNotifier.searchIssues(
-                    _searchQuery,
-                    state: state,
-                    assigned: widget.initialFilter == 'assigned' ? true : null,
-                  );
-                },
-                l10n: l10n,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _FilterChips(
+                      selectedState: Injection.issueNotifier.issuesListFilter ?? 'open',
+                      onSelected: (state) {
+                        setState(() {});
+                        Injection.issueNotifier.searchIssues(
+                          _searchQuery,
+                          state: state,
+                          filters: _filterState.value,
+                        );
+                      },
+                      l10n: l10n,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.filter_list),
+                    tooltip: l10n.moreFilters,
+                    onPressed: _showFilterSheet,
+                  ),
+                ],
               ),
             ),
+          ),
+          ValueListenableBuilder<IssueFilterState>(
+            valueListenable: _filterState,
+            builder: (context, filter, _) {
+              if (!filter.hasFilters) return const SizedBox.shrink();
+              return FadeInWrapper(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: UIConstants.md, vertical: UIConstants.sm),
+                  child: Wrap(
+                    spacing: UIConstants.sm,
+                    runSpacing: UIConstants.sm,
+                    children: [
+                      ...filter.labels.map((label) => Chip(
+                        label: Text(label),
+                        onDeleted: () {
+                          _filterState.value = filter.copyWith(
+                            labels: filter.labels.difference({label}),
+                          );
+                          _forceReload();
+                        },
+                      )),
+                      ...filter.milestones.map((m) => Chip(
+                        label: Text(m),
+                        onDeleted: () {
+                          _filterState.value = filter.copyWith(
+                            milestones: filter.milestones.difference({m}),
+                          );
+                          _forceReload();
+                        },
+                      )),
+                      if (filter.type != null)
+                        Chip(
+                          label: Text(filter.type!),
+                          onDeleted: () {
+                            _filterState.value = filter.copyWith(clearType: true);
+                            _forceReload();
+                          },
+                        ),
+                      if (filter.assignedToMe)
+                        Chip(
+                          label: Text(l10n.assignedToMe),
+                          onDeleted: () {
+                            _filterState.value = filter.copyWith(assignedToMe: false);
+                            _forceReload();
+                          },
+                        ),
+                      if (filter.createdByMe)
+                        Chip(
+                          label: Text(l10n.createdByMe),
+                          onDeleted: () {
+                            _filterState.value = filter.copyWith(createdByMe: false);
+                            _forceReload();
+                          },
+                        ),
+                      if (filter.mentionedMe)
+                        Chip(
+                          label: Text(l10n.mentionedMe),
+                          onDeleted: () {
+                            _filterState.value = filter.copyWith(mentionedMe: false);
+                            _forceReload();
+                          },
+                        ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
           if (_filtersLoaded && _savedFilters.isNotEmpty)
             Padding(

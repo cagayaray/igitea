@@ -19,6 +19,13 @@
 
 ## [Unreleased]
 
+### Added
+- **Issue List advanced filters**: labels, milestones, type, assignee, created by me, mentioned me
+  - Touch-friendly BottomSheet UI with drag handle, apply/reset actions
+  - Active filters shown as deletable chips above the issue list
+  - Repo Issues Tab: added SearchBar support for text search
+- **Filter sheet deduplication**: prevent multiple simultaneous BottomSheet popups
+
 ## [0.33.0] - 2026-05-11
 
 ### Added

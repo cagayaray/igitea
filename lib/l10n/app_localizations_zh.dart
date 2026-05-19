@@ -114,10 +114,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get repositorySections => '仓库区块';
 
   @override
-  String get issues => '问题';
+  String get issues => 'Issues';
 
   @override
-  String get pullRequests => '拉取请求';
+  String get pullRequests => 'Pull Requests';
 
   @override
   String get releases => '发布';
@@ -2241,6 +2241,36 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get loadMoreActivity => '加载更多动态';
+
+  @override
+  String get filters => '筛选';
+
+  @override
+  String get type => '类型';
+
+  @override
+  String get assignedToMe => '分配给我';
+
+  @override
+  String get createdByMe => '我创建的';
+
+  @override
+  String get mentionedMe => '提及我的';
+
+  @override
+  String get reset => '重置';
+
+  @override
+  String get apply => '应用';
+
+  @override
+  String get moreFilters => '更多筛选';
+
+  @override
+  String get noLabelsAvailable => '暂无标签';
+
+  @override
+  String get noMilestonesAvailable => '暂无里程碑';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

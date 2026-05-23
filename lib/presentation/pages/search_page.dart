@@ -7,8 +7,10 @@ import '../../domain/entities/issue_state.dart';
 import '../../l10n/app_localizations.dart';
 import '../../presentation/state/issue_notifier.dart';
 import '../../presentation/state/repo_notifier.dart';
+import '../models/issue_filter_state.dart';
 import '../models/repo_filter_state.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/issue_filter_bottom_sheet.dart';
 import '../widgets/premium_card.dart';
 import '../widgets/repo_filter_bottom_sheet.dart';
 import '../widgets/user_avatar.dart';
@@ -28,12 +30,19 @@ class _SearchPageState extends State<SearchPage>
   final _searchController = TextEditingController();
   late TabController _tabController;
   final ValueNotifier<RepoFilterState> _repoFilterState = ValueNotifier(const RepoFilterState());
+  final ValueNotifier<IssueFilterState> _issueFilterState = ValueNotifier(const IssueFilterState());
   bool _isRepoFilterSheetOpen = false;
+  bool _isIssueFilterSheetOpen = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -46,16 +55,19 @@ class _SearchPageState extends State<SearchPage>
   void _onSearch() {
     final query = _searchController.text.trim();
     if (query.isEmpty) return;
-    final filter = _repoFilterState.value;
+    final repoFilter = _repoFilterState.value;
     Injection.repoNotifier.searchRepos(
       q: query,
-      sort: filter.sort,
-      order: filter.order,
-      private: filter.private,
-      archived: filter.archived,
-      template: filter.template,
+      sort: repoFilter.sort,
+      order: repoFilter.order,
+      private: repoFilter.private,
+      archived: repoFilter.archived,
+      template: repoFilter.template,
     );
-    Injection.issueNotifier.searchIssues(query);
+    Injection.issueNotifier.searchIssues(
+      query,
+      filters: _issueFilterState.value,
+    );
     Injection.userNotifier.searchUsers(query);
   }
 
@@ -79,6 +91,70 @@ class _SearchPageState extends State<SearchPage>
     } finally {
       _isRepoFilterSheetOpen = false;
     }
+  }
+
+  Future<void> _showIssueFilterSheet() async {
+    if (_isIssueFilterSheetOpen) return;
+    _isIssueFilterSheetOpen = true;
+
+    final notifier = Injection.issueNotifier;
+    final issuesState = notifier.issuesListState;
+
+    final Set<String> labels = {};
+    final Set<String> milestones = {};
+    if (issuesState is IssuesListLoaded) {
+      for (final issue in issuesState.issues) {
+        if (issue.labels != null) {
+          for (final label in issue.labels!) {
+            if (label.name != null) labels.add(label.name!);
+          }
+        }
+        if (issue.milestone?.title != null) {
+          milestones.add(issue.milestone!.title!);
+        }
+      }
+    }
+
+    try {
+      final result = await showModalBottomSheet<IssueFilterState>(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) => IssueFilterBottomSheet(
+          initialState: _issueFilterState.value,
+          availableLabels: labels.toList()..sort(),
+          availableMilestones: milestones.toList()..sort(),
+        ),
+      );
+
+      if (result != null) {
+        _issueFilterState.value = result;
+        _onSearch();
+      }
+    } finally {
+      _isIssueFilterSheetOpen = false;
+    }
+  }
+
+  void _showFilterSheet() {
+    switch (_tabController.index) {
+      case 0:
+        _showRepoFilterSheet();
+        break;
+      case 1:
+        _showIssueFilterSheet();
+        break;
+      case 2:
+      default:
+        break;
+    }
+  }
+
+  bool get _hasActiveFilters {
+    return switch (_tabController.index) {
+      0 => _repoFilterState.value.hasFilters,
+      1 => _issueFilterState.value.hasFilters,
+      _ => false,
+    };
   }
 
   @override
@@ -112,92 +188,155 @@ class _SearchPageState extends State<SearchPage>
                   ),
                 ),
                 const SizedBox(width: UIConstants.sm),
-                ValueListenableBuilder<RepoFilterState>(
-                  valueListenable: _repoFilterState,
-                  builder: (context, filter, _) {
-                    return Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.filter_list),
-                          tooltip: l10n.moreFilters,
-                          onPressed: _showRepoFilterSheet,
-                        ),
-                        if (filter.hasFilters)
-                          Positioned(
-                            right: 6,
-                            top: 6,
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
-                                shape: BoxShape.circle,
-                              ),
+                if (_tabController.index != 2)
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.filter_list),
+                        tooltip: l10n.moreFilters,
+                        onPressed: _showFilterSheet,
+                      ),
+                      if (_hasActiveFilters)
+                        Positioned(
+                          right: 6,
+                          top: 6,
+                          child: Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              shape: BoxShape.circle,
                             ),
                           ),
-                      ],
-                    );
-                  },
-                ),
+                        ),
+                    ],
+                  ),
               ],
             ),
           ),
-          ValueListenableBuilder<RepoFilterState>(
-            valueListenable: _repoFilterState,
-            builder: (context, filter, _) {
-              if (!filter.hasFilters) return const SizedBox.shrink();
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: UIConstants.md),
-                child: Wrap(
-                  spacing: UIConstants.sm,
-                  runSpacing: UIConstants.sm,
-                  children: [
-                    if (filter.sort != null)
-                      Chip(
-                        label: Text(filter.sort!),
+          if (_tabController.index == 0)
+            ValueListenableBuilder<RepoFilterState>(
+              valueListenable: _repoFilterState,
+              builder: (context, filter, _) {
+                if (!filter.hasFilters) return const SizedBox.shrink();
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: UIConstants.md),
+                  child: Wrap(
+                    spacing: UIConstants.sm,
+                    runSpacing: UIConstants.sm,
+                    children: [
+                      if (filter.sort != null)
+                        Chip(
+                          label: Text(filter.sort!),
+                          onDeleted: () {
+                            _repoFilterState.value = filter.copyWith(clearSort: true);
+                            _onSearch();
+                          },
+                        ),
+                      if (filter.order != null)
+                        Chip(
+                          label: Text(filter.order!),
+                          onDeleted: () {
+                            _repoFilterState.value = filter.copyWith(clearOrder: true);
+                            _onSearch();
+                          },
+                        ),
+                      if (filter.private == true)
+                        Chip(
+                          label: Text(l10n.privateReposOnly),
+                          onDeleted: () {
+                            _repoFilterState.value = filter.copyWith(private: false);
+                            _onSearch();
+                          },
+                        ),
+                      if (filter.archived == true)
+                        Chip(
+                          label: Text(l10n.includeArchived),
+                          onDeleted: () {
+                            _repoFilterState.value = filter.copyWith(archived: false);
+                            _onSearch();
+                          },
+                        ),
+                      if (filter.template == true)
+                        Chip(
+                          label: Text(l10n.templatesOnly),
+                          onDeleted: () {
+                            _repoFilterState.value = filter.copyWith(template: false);
+                            _onSearch();
+                          },
+                        ),
+                    ],
+                  ),
+                );
+              },
+            )
+          else if (_tabController.index == 1)
+            ValueListenableBuilder<IssueFilterState>(
+              valueListenable: _issueFilterState,
+              builder: (context, filter, _) {
+                if (!filter.hasFilters) return const SizedBox.shrink();
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: UIConstants.md),
+                  child: Wrap(
+                    spacing: UIConstants.sm,
+                    runSpacing: UIConstants.sm,
+                    children: [
+                      ...filter.labels.map((label) => Chip(
+                        label: Text(label),
                         onDeleted: () {
-                          _repoFilterState.value = filter.copyWith(clearSort: true);
+                          _issueFilterState.value = filter.copyWith(
+                            labels: filter.labels.difference({label}),
+                          );
                           _onSearch();
                         },
-                      ),
-                    if (filter.order != null)
-                      Chip(
-                        label: Text(filter.order!),
+                      )),
+                      ...filter.milestones.map((m) => Chip(
+                        label: Text(m),
                         onDeleted: () {
-                          _repoFilterState.value = filter.copyWith(clearOrder: true);
+                          _issueFilterState.value = filter.copyWith(
+                            milestones: filter.milestones.difference({m}),
+                          );
                           _onSearch();
                         },
-                      ),
-                    if (filter.private == true)
-                      Chip(
-                        label: Text(l10n.privateReposOnly),
-                        onDeleted: () {
-                          _repoFilterState.value = filter.copyWith(private: false);
-                          _onSearch();
-                        },
-                      ),
-                    if (filter.archived == true)
-                      Chip(
-                        label: Text(l10n.includeArchived),
-                        onDeleted: () {
-                          _repoFilterState.value = filter.copyWith(archived: false);
-                          _onSearch();
-                        },
-                      ),
-                    if (filter.template == true)
-                      Chip(
-                        label: Text(l10n.templatesOnly),
-                        onDeleted: () {
-                          _repoFilterState.value = filter.copyWith(template: false);
-                          _onSearch();
-                        },
-                      ),
-                  ],
-                ),
-              );
-            },
-          ),
+                      )),
+                      if (filter.type != null)
+                        Chip(
+                          label: Text(filter.type!),
+                          onDeleted: () {
+                            _issueFilterState.value = filter.copyWith(clearType: true);
+                            _onSearch();
+                          },
+                        ),
+                      if (filter.assignedToMe)
+                        Chip(
+                          label: Text(l10n.assignedToMe),
+                          onDeleted: () {
+                            _issueFilterState.value = filter.copyWith(assignedToMe: false);
+                            _onSearch();
+                          },
+                        ),
+                      if (filter.createdByMe)
+                        Chip(
+                          label: Text(l10n.createdByMe),
+                          onDeleted: () {
+                            _issueFilterState.value = filter.copyWith(createdByMe: false);
+                            _onSearch();
+                          },
+                        ),
+                      if (filter.mentionedMe)
+                        Chip(
+                          label: Text(l10n.mentionedMe),
+                          onDeleted: () {
+                            _issueFilterState.value = filter.copyWith(mentionedMe: false);
+                            _onSearch();
+                          },
+                        ),
+                    ],
+                  ),
+                );
+              },
+            ),
           Expanded(
             child: TabBarView(
               controller: _tabController,

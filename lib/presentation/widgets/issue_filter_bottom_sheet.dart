@@ -106,16 +106,6 @@ class _IssueFilterBottomSheetState extends State<IssueFilterBottomSheet> {
                         }).toList(),
                       ),
                       const SizedBox(height: 16),
-                    ] else ...[
-                      _SectionTitle(title: l10n.labels),
-                      const SizedBox(height: 8),
-                      Text(
-                        l10n.noLabelsAvailable,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
                     ],
                     if (widget.availableMilestones.isNotEmpty) ...[
                       _SectionTitle(title: l10n.milestones),
@@ -131,16 +121,6 @@ class _IssueFilterBottomSheetState extends State<IssueFilterBottomSheet> {
                             onSelected: (_) => _toggleMilestone(m),
                           );
                         }).toList(),
-                      ),
-                      const SizedBox(height: 16),
-                    ] else ...[
-                      _SectionTitle(title: l10n.milestones),
-                      const SizedBox(height: 8),
-                      Text(
-                        l10n.noMilestonesAvailable,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
                       ),
                       const SizedBox(height: 16),
                     ],

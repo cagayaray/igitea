@@ -97,32 +97,14 @@ class _SearchPageState extends State<SearchPage>
     if (_isIssueFilterSheetOpen) return;
     _isIssueFilterSheetOpen = true;
 
-    final notifier = Injection.issueNotifier;
-    final issuesState = notifier.issuesListState;
-
-    final Set<String> labels = {};
-    final Set<String> milestones = {};
-    if (issuesState is IssuesListLoaded) {
-      for (final issue in issuesState.issues) {
-        if (issue.labels != null) {
-          for (final label in issue.labels!) {
-            if (label.name != null) labels.add(label.name!);
-          }
-        }
-        if (issue.milestone?.title != null) {
-          milestones.add(issue.milestone!.title!);
-        }
-      }
-    }
-
     try {
       final result = await showModalBottomSheet<IssueFilterState>(
         context: context,
         isScrollControlled: true,
         builder: (_) => IssueFilterBottomSheet(
           initialState: _issueFilterState.value,
-          availableLabels: labels.toList()..sort(),
-          availableMilestones: milestones.toList()..sort(),
+          availableLabels: const [],
+          availableMilestones: const [],
         ),
       );
 

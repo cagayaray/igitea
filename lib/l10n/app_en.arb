@@ -740,5 +740,19 @@
   "apply": "Apply",
   "moreFilters": "More filters",
   "noLabelsAvailable": "No labels available",
-  "noMilestonesAvailable": "No milestones available"
+  "noMilestonesAvailable": "No milestones available",
+  "sort": "Sort",
+  "order": "Order",
+  "default_": "Default",
+  "ascending": "Ascending",
+  "descending": "Descending",
+  "relevance": "Relevance",
+  "alphabetical": "Alphabetical",
+  "newest": "Newest",
+  "recentlyUpdated": "Recently updated",
+  "mostStars": "Most stars",
+  "largest": "Largest",
+  "privateReposOnly": "Private repositories only",
+  "includeArchived": "Include archived",
+  "templatesOnly": "Templates only"
 }

@@ -2310,4 +2310,46 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get noMilestonesAvailable => 'No milestones available';
+
+  @override
+  String get sort => 'Sort';
+
+  @override
+  String get order => 'Order';
+
+  @override
+  String get default_ => 'Default';
+
+  @override
+  String get ascending => 'Ascending';
+
+  @override
+  String get descending => 'Descending';
+
+  @override
+  String get relevance => 'Relevance';
+
+  @override
+  String get alphabetical => 'Alphabetical';
+
+  @override
+  String get newest => 'Newest';
+
+  @override
+  String get recentlyUpdated => 'Recently updated';
+
+  @override
+  String get mostStars => 'Most stars';
+
+  @override
+  String get largest => 'Largest';
+
+  @override
+  String get privateReposOnly => 'Private repositories only';
+
+  @override
+  String get includeArchived => 'Include archived';
+
+  @override
+  String get templatesOnly => 'Templates only';
 }

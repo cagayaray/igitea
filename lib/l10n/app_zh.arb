@@ -730,5 +730,19 @@
   "apply": "应用",
   "moreFilters": "更多筛选",
   "noLabelsAvailable": "暂无标签",
-  "noMilestonesAvailable": "暂无里程碑"
+  "noMilestonesAvailable": "暂无里程碑",
+  "sort": "排序",
+  "order": "顺序",
+  "default_": "默认",
+  "ascending": "升序",
+  "descending": "降序",
+  "relevance": "相关度",
+  "alphabetical": "字母顺序",
+  "newest": "最新",
+  "recentlyUpdated": "最近更新",
+  "mostStars": "最多星标",
+  "largest": "最大",
+  "privateReposOnly": "仅私有仓库",
+  "includeArchived": "包含归档仓库",
+  "templatesOnly": "仅模板"
 }

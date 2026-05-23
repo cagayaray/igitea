@@ -7,8 +7,10 @@ import '../../domain/entities/issue_state.dart';
 import '../../l10n/app_localizations.dart';
 import '../../presentation/state/issue_notifier.dart';
 import '../../presentation/state/repo_notifier.dart';
+import '../models/repo_filter_state.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/premium_card.dart';
+import '../widgets/repo_filter_bottom_sheet.dart';
 import '../widgets/user_avatar.dart';
 import 'issue_detail_page.dart';
 import 'repo_detail_page.dart';
@@ -25,6 +27,8 @@ class _SearchPageState extends State<SearchPage>
     with SingleTickerProviderStateMixin {
   final _searchController = TextEditingController();
   late TabController _tabController;
+  final ValueNotifier<RepoFilterState> _repoFilterState = ValueNotifier(const RepoFilterState());
+  bool _isRepoFilterSheetOpen = false;
 
   @override
   void initState() {
@@ -42,9 +46,39 @@ class _SearchPageState extends State<SearchPage>
   void _onSearch() {
     final query = _searchController.text.trim();
     if (query.isEmpty) return;
-    Injection.repoNotifier.searchRepos(q: query);
+    final filter = _repoFilterState.value;
+    Injection.repoNotifier.searchRepos(
+      q: query,
+      sort: filter.sort,
+      order: filter.order,
+      private: filter.private,
+      archived: filter.archived,
+      template: filter.template,
+    );
     Injection.issueNotifier.searchIssues(query);
     Injection.userNotifier.searchUsers(query);
+  }
+
+  Future<void> _showRepoFilterSheet() async {
+    if (_isRepoFilterSheetOpen) return;
+    _isRepoFilterSheetOpen = true;
+
+    try {
+      final result = await showModalBottomSheet<RepoFilterState>(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) => RepoFilterBottomSheet(
+          initialState: _repoFilterState.value,
+        ),
+      );
+
+      if (result != null) {
+        _repoFilterState.value = result;
+        _onSearch();
+      }
+    } finally {
+      _isRepoFilterSheetOpen = false;
+    }
   }
 
   @override
@@ -67,12 +101,102 @@ class _SearchPageState extends State<SearchPage>
         children: [
           Padding(
             padding: const EdgeInsets.all(UIConstants.md),
-            child: SearchBar(
-              controller: _searchController,
-              hintText: l10n.search,
-              leading: const Icon(Icons.search),
-              onSubmitted: (_) => _onSearch(),
+            child: Row(
+              children: [
+                Expanded(
+                  child: SearchBar(
+                    controller: _searchController,
+                    hintText: l10n.search,
+                    leading: const Icon(Icons.search),
+                    onSubmitted: (_) => _onSearch(),
+                  ),
+                ),
+                const SizedBox(width: UIConstants.sm),
+                ValueListenableBuilder<RepoFilterState>(
+                  valueListenable: _repoFilterState,
+                  builder: (context, filter, _) {
+                    return Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.filter_list),
+                          tooltip: l10n.moreFilters,
+                          onPressed: _showRepoFilterSheet,
+                        ),
+                        if (filter.hasFilters)
+                          Positioned(
+                            right: 6,
+                            top: 6,
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
+              ],
             ),
+          ),
+          ValueListenableBuilder<RepoFilterState>(
+            valueListenable: _repoFilterState,
+            builder: (context, filter, _) {
+              if (!filter.hasFilters) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: UIConstants.md),
+                child: Wrap(
+                  spacing: UIConstants.sm,
+                  runSpacing: UIConstants.sm,
+                  children: [
+                    if (filter.sort != null)
+                      Chip(
+                        label: Text(filter.sort!),
+                        onDeleted: () {
+                          _repoFilterState.value = filter.copyWith(clearSort: true);
+                          _onSearch();
+                        },
+                      ),
+                    if (filter.order != null)
+                      Chip(
+                        label: Text(filter.order!),
+                        onDeleted: () {
+                          _repoFilterState.value = filter.copyWith(clearOrder: true);
+                          _onSearch();
+                        },
+                      ),
+                    if (filter.private == true)
+                      Chip(
+                        label: Text(l10n.privateReposOnly),
+                        onDeleted: () {
+                          _repoFilterState.value = filter.copyWith(private: false);
+                          _onSearch();
+                        },
+                      ),
+                    if (filter.archived == true)
+                      Chip(
+                        label: Text(l10n.includeArchived),
+                        onDeleted: () {
+                          _repoFilterState.value = filter.copyWith(archived: false);
+                          _onSearch();
+                        },
+                      ),
+                    if (filter.template == true)
+                      Chip(
+                        label: Text(l10n.templatesOnly),
+                        onDeleted: () {
+                          _repoFilterState.value = filter.copyWith(template: false);
+                          _onSearch();
+                        },
+                      ),
+                  ],
+                ),
+              );
+            },
           ),
           Expanded(
             child: TabBarView(

@@ -24,10 +24,25 @@ class GetRepoUseCase {
 class SearchReposParams {
   final String? q;
   final int? uid;
+  final String? sort;
+  final String? order;
+  final bool? private;
+  final bool? archived;
+  final bool? template;
   final int? page;
   final int? limit;
 
-  const SearchReposParams({this.q, this.uid, this.page, this.limit});
+  const SearchReposParams({
+    this.q,
+    this.uid,
+    this.sort,
+    this.order,
+    this.private,
+    this.archived,
+    this.template,
+    this.page,
+    this.limit,
+  });
 }
 
 class SearchReposUseCase {
@@ -40,6 +55,11 @@ class SearchReposUseCase {
     return _repository.searchRepos(
       q: params.q,
       uid: params.uid,
+      sort: params.sort,
+      order: params.order,
+      private: params.private,
+      archived: params.archived,
+      template: params.template,
       page: params.page,
       limit: params.limit,
     );

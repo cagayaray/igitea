@@ -385,11 +385,26 @@ class RepoRepositoryImpl implements RepoRepository {
   Future<Either<Failure, SearchResults>> searchRepos({
     String? q,
     int? uid,
+    String? sort,
+    String? order,
+    bool? private,
+    bool? archived,
+    bool? template,
     int? page,
     int? limit,
   }) async {
     return execute(
-      () => _apiService.repoSearch(q: q, uid: uid, page: page, limit: limit),
+      () => _apiService.repoSearch(
+        q: q,
+        uid: uid,
+        sort: sort,
+        order: order,
+        private: private,
+        archived: archived,
+        template: template,
+        page: page,
+        limit: limit,
+      ),
     );
   }
 

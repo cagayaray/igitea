@@ -2271,6 +2271,48 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get noMilestonesAvailable => '暂无里程碑';
+
+  @override
+  String get sort => '排序';
+
+  @override
+  String get order => '顺序';
+
+  @override
+  String get default_ => '默认';
+
+  @override
+  String get ascending => '升序';
+
+  @override
+  String get descending => '降序';
+
+  @override
+  String get relevance => '相关度';
+
+  @override
+  String get alphabetical => '字母顺序';
+
+  @override
+  String get newest => '最新';
+
+  @override
+  String get recentlyUpdated => '最近更新';
+
+  @override
+  String get mostStars => '最多星标';
+
+  @override
+  String get largest => '最大';
+
+  @override
+  String get privateReposOnly => '仅私有仓库';
+
+  @override
+  String get includeArchived => '包含归档仓库';
+
+  @override
+  String get templatesOnly => '仅模板';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

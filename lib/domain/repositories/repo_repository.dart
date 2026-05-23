@@ -190,6 +190,11 @@ abstract class RepoRepository {
   Future<Either<Failure, SearchResults>> searchRepos({
     String? q,
     int? uid,
+    String? sort,
+    String? order,
+    bool? private,
+    bool? archived,
+    bool? template,
     int? page,
     int? limit,
   });

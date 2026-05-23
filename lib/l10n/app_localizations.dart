@@ -4516,6 +4516,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No milestones available'**
   String get noMilestonesAvailable;
+
+  /// No description provided for @sort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get sort;
+
+  /// No description provided for @order.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get order;
+
+  /// No description provided for @default_.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get default_;
+
+  /// No description provided for @ascending.
+  ///
+  /// In en, this message translates to:
+  /// **'Ascending'**
+  String get ascending;
+
+  /// No description provided for @descending.
+  ///
+  /// In en, this message translates to:
+  /// **'Descending'**
+  String get descending;
+
+  /// No description provided for @relevance.
+  ///
+  /// In en, this message translates to:
+  /// **'Relevance'**
+  String get relevance;
+
+  /// No description provided for @alphabetical.
+  ///
+  /// In en, this message translates to:
+  /// **'Alphabetical'**
+  String get alphabetical;
+
+  /// No description provided for @newest.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get newest;
+
+  /// No description provided for @recentlyUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently updated'**
+  String get recentlyUpdated;
+
+  /// No description provided for @mostStars.
+  ///
+  /// In en, this message translates to:
+  /// **'Most stars'**
+  String get mostStars;
+
+  /// No description provided for @largest.
+  ///
+  /// In en, this message translates to:
+  /// **'Largest'**
+  String get largest;
+
+  /// No description provided for @privateReposOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Private repositories only'**
+  String get privateReposOnly;
+
+  /// No description provided for @includeArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Include archived'**
+  String get includeArchived;
+
+  /// No description provided for @templatesOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Templates only'**
+  String get templatesOnly;
 }
 
 class _AppLocalizationsDelegate

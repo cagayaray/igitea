@@ -24,6 +24,11 @@
   - Touch-friendly BottomSheet UI with drag handle, apply/reset actions
   - Active filters shown as deletable chips above the issue list
   - Repo Issues Tab: added SearchBar support for text search
+- **Repository search advanced filters**: sort, order, private only, archived, templates
+  - Sort options: relevance, alphabetical, newest, recently updated, most stars, largest
+  - Order options: default, ascending, descending
+  - Filter options: private only, include archived, templates only
+  - Active filters shown as deletable chips
 - **Filter sheet deduplication**: prevent multiple simultaneous BottomSheet popups
 
 ## [0.33.0] - 2026-05-11

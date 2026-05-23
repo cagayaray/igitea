@@ -506,12 +506,32 @@ class RepoNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> searchRepos({String? q, int? uid, int? page, int? limit}) async {
+  Future<void> searchRepos({
+    String? q,
+    int? uid,
+    String? sort,
+    String? order,
+    bool? private,
+    bool? archived,
+    bool? template,
+    int? page,
+    int? limit,
+  }) async {
     _state = const RepoLoading();
     notifyListeners();
 
     final result = await _searchReposUseCase.call(
-      SearchReposParams(q: q, uid: uid, page: page, limit: limit),
+      SearchReposParams(
+        q: q,
+        uid: uid,
+        sort: sort,
+        order: order,
+        private: private,
+        archived: archived,
+        template: template,
+        page: page,
+        limit: limit,
+      ),
     );
     switch (result) {
       case Left<Failure, SearchResults>(:final value):

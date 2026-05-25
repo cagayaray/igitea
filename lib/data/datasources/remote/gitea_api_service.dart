@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import '../../../core/errors/exceptions.dart';
 import '../../../data/models/generated/generated_models.dart';
 import 'api_client.dart';
 
@@ -114,7 +115,7 @@ class GiteaApiService {
         '/user/following/${Uri.encodeComponent(username)}',
       );
       return response.statusCode == 204;
-    } catch (_) {
+    } on AuthenticationException {
       return false;
     }
   }
@@ -1680,7 +1681,7 @@ class GiteaApiService {
     try {
       await _client.get('/user/starred/${Uri.encodeComponent(owner)}/${Uri.encodeComponent(repo)}');
       return true;
-    } catch (_) {
+    } on AuthenticationException {
       return false;
     }
   }
@@ -1715,7 +1716,7 @@ class GiteaApiService {
         '/repos/${Uri.encodeComponent(owner)}/${Uri.encodeComponent(repo)}/subscription',
       );
       return true;
-    } catch (_) {
+    } on AuthenticationException {
       return false;
     }
   }

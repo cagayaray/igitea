@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -497,13 +499,16 @@ class _RepoHeader extends StatelessWidget {
                   color: theme.colorScheme.onSurfaceVariant,
                 )),
                 const Spacer(),
-                InkWell(
-                  onTap: () => showTopicEditDialog(
-                    context, owner, repoName, repo.topics ?? [],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Icon(Icons.edit, size: 14, color: theme.colorScheme.primary),
+                Tooltip(
+                  message: '${l10n.edit} ${l10n.topics}',
+                  child: InkWell(
+                    onTap: () => showTopicEditDialog(
+                      context, owner, repoName, repo.topics ?? [],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Icon(Icons.edit, size: 14, color: theme.colorScheme.primary),
+                    ),
                   ),
                 ),
               ],
@@ -1013,6 +1018,7 @@ class _IssuesTabState extends State<_IssuesTab> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   bool _isFilterSheetOpen = false;
+  Timer? _debounceTimer;
 
   void _loadIssues() {
     final authState = Injection.authNotifier.state;
@@ -1095,6 +1101,7 @@ class _IssuesTabState extends State<_IssuesTab> {
   @override
   void dispose() {
     _searchController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
   }
 
@@ -1132,7 +1139,8 @@ class _IssuesTabState extends State<_IssuesTab> {
                               ],
                               onChanged: (query) {
                                 setState(() => _searchQuery = query);
-                                _loadIssues();
+                                _debounceTimer?.cancel();
+                                _debounceTimer = Timer(const Duration(milliseconds: 300), _loadIssues);
                               },
                               padding: const WidgetStatePropertyAll(
                                 EdgeInsets.symmetric(horizontal: UIConstants.md),

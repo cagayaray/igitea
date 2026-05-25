@@ -166,7 +166,11 @@ class _SearchPageState extends State<SearchPage>
                     controller: _searchController,
                     hintText: l10n.search,
                     leading: const Icon(Icons.search),
-                    onSubmitted: (_) => _onSearch(),
+                    textInputAction: TextInputAction.search,
+                    onSubmitted: (_) {
+                      _onSearch();
+                      FocusScope.of(context).unfocus();
+                    },
                   ),
                 ),
                 const SizedBox(width: UIConstants.sm),
@@ -325,7 +329,7 @@ class _SearchPageState extends State<SearchPage>
               children: [
                 _RepoSearchResults(),
                 _IssueSearchResults(),
-                _UserSearchResults(),
+                _UserSearchResults(currentQuery: _searchController.text.trim()),
               ],
             ),
           ),
@@ -644,6 +648,10 @@ class _SearchIssueCardState extends State<_SearchIssueCard> {
 }
 
 class _UserSearchResults extends StatelessWidget {
+  final String currentQuery;
+
+  const _UserSearchResults({required this.currentQuery});
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -666,9 +674,7 @@ class _UserSearchResults extends StatelessWidget {
                 Text('${l10n.error}: $error'),
                 const SizedBox(height: UIConstants.md),
                 FilledButton(
-                  onPressed: () {
-                    // retry handled by user
-                  },
+                  onPressed: () => Injection.userNotifier.searchUsers(currentQuery),
                   child: Text(l10n.retry),
                 ),
               ],

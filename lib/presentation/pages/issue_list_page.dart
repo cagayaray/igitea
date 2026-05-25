@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../../core/animations/animated_wrapper.dart';
 import '../../core/constants/ui_constants.dart';
@@ -33,6 +35,7 @@ class _IssueListPageState extends State<IssueListPage> {
   List<SavedFilter> _savedFilters = [];
   bool _savedFiltersExpanded = false;
   bool _filtersLoaded = false;
+  Timer? _searchDebounceTimer;
   final ValueNotifier<IssueFilterState> _filterState = ValueNotifier(const IssueFilterState());
 
   @override
@@ -49,6 +52,7 @@ class _IssueListPageState extends State<IssueListPage> {
 
   @override
   void dispose() {
+    _searchDebounceTimer?.cancel();
     _searchController.dispose();
     super.dispose();
   }
@@ -114,7 +118,8 @@ class _IssueListPageState extends State<IssueListPage> {
 
   void _onSearch(String query) {
     setState(() => _searchQuery = query);
-    _forceReload();
+    _searchDebounceTimer?.cancel();
+    _searchDebounceTimer = Timer(const Duration(milliseconds: 300), _forceReload);
   }
 
   Future<void> _loadSavedFilters() async {
@@ -616,7 +621,7 @@ class _IssueCard extends StatelessWidget {
               ],
               if (issue.updated_at != null) ...[
                 Text(
-                  _formatDate(issue.updated_at!),
+                  _formatDate(issue.updated_at!, l10n),
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
                   ),
@@ -629,14 +634,14 @@ class _IssueCard extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime date) {
+  String _formatDate(DateTime date, AppLocalizations l10n) {
     final now = DateTime.now();
     final diff = now.difference(date);
-    if (diff.inDays > 365) return '${diff.inDays ~/ 365}y ago';
-    if (diff.inDays > 30) return '${diff.inDays ~/ 30}mo ago';
-    if (diff.inDays > 0) return '${diff.inDays}d ago';
-    if (diff.inHours > 0) return '${diff.inHours}h ago';
-    return 'just now';
+    if (diff.inDays > 365) return l10n.yearsAgo('${diff.inDays ~/ 365}');
+    if (diff.inDays > 30) return l10n.monthsAgo('${diff.inDays ~/ 30}');
+    if (diff.inDays > 0) return l10n.daysAgo('${diff.inDays}');
+    if (diff.inHours > 0) return l10n.hoursAgo('${diff.inHours}');
+    return l10n.justNow;
   }
 }
 

@@ -360,6 +360,46 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String yearsAgo(Object count) {
+    return '$count年前';
+  }
+
+  @override
+  String yearsAgoParams(Object count) {
+    return '$count年前';
+  }
+
+  @override
+  String monthsAgo(Object count) {
+    return '$count个月前';
+  }
+
+  @override
+  String monthsAgoParams(Object count) {
+    return '$count个月前';
+  }
+
+  @override
+  String daysAgo(Object count) {
+    return '$count天前';
+  }
+
+  @override
+  String daysAgoParams(Object count) {
+    return '$count天前';
+  }
+
+  @override
+  String hoursAgo(Object count) {
+    return '$count小时前';
+  }
+
+  @override
+  String hoursAgoParams(Object count) {
+    return '$count小时前';
+  }
+
+  @override
   String get fileBrowser => '文件浏览器';
 
   @override

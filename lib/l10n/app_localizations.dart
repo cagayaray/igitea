@@ -743,6 +743,54 @@ abstract class AppLocalizations {
   /// **'{time} ago'**
   String agoParams(Object time);
 
+  /// No description provided for @yearsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}y ago'**
+  String yearsAgo(Object count);
+
+  /// No description provided for @yearsAgoParams.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}y ago'**
+  String yearsAgoParams(Object count);
+
+  /// No description provided for @monthsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}mo ago'**
+  String monthsAgo(Object count);
+
+  /// No description provided for @monthsAgoParams.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}mo ago'**
+  String monthsAgoParams(Object count);
+
+  /// No description provided for @daysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}d ago'**
+  String daysAgo(Object count);
+
+  /// No description provided for @daysAgoParams.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}d ago'**
+  String daysAgoParams(Object count);
+
+  /// No description provided for @hoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}h ago'**
+  String hoursAgo(Object count);
+
+  /// No description provided for @hoursAgoParams.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}h ago'**
+  String hoursAgoParams(Object count);
+
   /// No description provided for @fileBrowser.
   ///
   /// In en, this message translates to:

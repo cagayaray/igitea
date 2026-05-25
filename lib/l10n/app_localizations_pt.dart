@@ -362,6 +362,46 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String yearsAgo(Object count) {
+    return '${count}y ago';
+  }
+
+  @override
+  String yearsAgoParams(Object count) {
+    return '${count}y ago';
+  }
+
+  @override
+  String monthsAgo(Object count) {
+    return '${count}mo ago';
+  }
+
+  @override
+  String monthsAgoParams(Object count) {
+    return '${count}mo ago';
+  }
+
+  @override
+  String daysAgo(Object count) {
+    return '${count}d ago';
+  }
+
+  @override
+  String daysAgoParams(Object count) {
+    return '${count}d ago';
+  }
+
+  @override
+  String hoursAgo(Object count) {
+    return '${count}h ago';
+  }
+
+  @override
+  String hoursAgoParams(Object count) {
+    return '${count}h ago';
+  }
+
+  @override
   String get fileBrowser => 'Navegador de arquivos';
 
   @override

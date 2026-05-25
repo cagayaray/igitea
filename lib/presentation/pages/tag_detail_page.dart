@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/models/generated/generated_models.dart';
 import '../../l10n/app_localizations.dart';
@@ -168,7 +169,7 @@ class TagDetailPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: OutlinedButton.icon(
-        onPressed: () {},
+        onPressed: () => launchUrl(Uri.parse(url)),
         icon: const Icon(Icons.download),
         label: Text(label),
       ),

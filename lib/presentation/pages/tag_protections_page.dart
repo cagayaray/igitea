@@ -41,44 +41,6 @@ class _TagProtectionsPageState extends State<TagProtectionsPage> {
     }
   }
 
-  Future<void> _create() async {
-    final l10n = AppLocalizations.of(context)!;
-    final nameController = TextEditingController();
-    final pattern = await showDialog<String>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.createTagProtection),
-        content: TextField(
-          controller: nameController,
-          decoration: InputDecoration(
-            labelText: l10n.namePattern,
-            hintText: 'v*',
-            border: const OutlineInputBorder(),
-          ),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, nameController.text.trim()),
-            child: Text(l10n.create),
-          ),
-        ],
-      ),
-    );
-
-    if (pattern == null || pattern.isEmpty || !mounted) return;
-
-    final result = await Injection.createTagProtectionUseCase(widget.owner, widget.repo, pattern);
-    if (!mounted) return;
-    switch (result) {
-      case Right<Failure, TagProtection>():
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.tagProtectionCreated)));
-        _load();
-      case Left<Failure, TagProtection>():
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.error)));
-    }
-  }
-
   Future<void> _add() async {
     final l10n = AppLocalizations.of(context)!;
     final nameController = TextEditingController();

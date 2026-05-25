@@ -36,12 +36,8 @@ class _RepoFilterBottomSheetState extends State<RepoFilterBottomSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final bottomPadding = MediaQuery.paddingOf(context).bottom;
-
     return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(bottom: bottomPadding),
-        child: Column(
+      child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -146,7 +142,6 @@ class _RepoFilterBottomSheetState extends State<RepoFilterBottomSheet> {
             ),
           ],
         ),
-      ),
     );
   }
 

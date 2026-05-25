@@ -57,11 +57,7 @@ class _IssueFilterBottomSheetState extends State<IssueFilterBottomSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final bottomPadding = MediaQuery.paddingOf(context).bottom;
-
     return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(bottom: bottomPadding),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,7 +178,6 @@ class _IssueFilterBottomSheetState extends State<IssueFilterBottomSheet> {
             ),
           ],
         ),
-      ),
     );
   }
 }

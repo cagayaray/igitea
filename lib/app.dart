@@ -23,19 +23,24 @@ class IGiteaApp extends StatefulWidget {
 }
 
 class _IGiteaAppState extends State<IGiteaApp> {
+  String? _lastBaseUrl;
+  String? _lastToken;
+  String? _lastUsername;
+  String? _lastPassword;
+
   @override
   void initState() {
     super.initState();
     Injection.initialize();
-    _tryRestoreSession();
-    Injection.themeNotifier.loadThemeMode();
-    Injection.themeNotifier.loadLocale();
+    _tryRestoreSession().catchError((e) => debugPrint('Session restore error: $e'));
+    Injection.themeNotifier.loadThemeMode().catchError((e) => debugPrint('Theme load error: $e'));
+    Injection.themeNotifier.loadLocale().catchError((e) => debugPrint('Locale load error: $e'));
   }
 
   Future<void> _tryRestoreSession() async {
     final saved = await AuthStorage().loadCredentials();
     if (saved != null) {
-      Injection.updateAuth(
+      _applyAuth(
         baseUrl: saved.baseUrl,
         token: saved.token,
         username: saved.username,
@@ -43,6 +48,30 @@ class _IGiteaAppState extends State<IGiteaApp> {
       );
     }
     await Injection.authNotifier.restoreSession();
+  }
+
+  void _applyAuth({
+    required String baseUrl,
+    String? token,
+    String? username,
+    String? password,
+  }) {
+    if (baseUrl == _lastBaseUrl &&
+        token == _lastToken &&
+        username == _lastUsername &&
+        password == _lastPassword) {
+      return;
+    }
+    _lastBaseUrl = baseUrl;
+    _lastToken = token;
+    _lastUsername = username;
+    _lastPassword = password;
+    Injection.updateAuth(
+      baseUrl: baseUrl,
+      token: token,
+      username: username,
+      password: password,
+    );
   }
 
   @override
@@ -53,7 +82,7 @@ class _IGiteaAppState extends State<IGiteaApp> {
         final state = Injection.authNotifier.state;
 
         if (state is AuthAuthenticated) {
-          Injection.updateAuth(
+          _applyAuth(
             baseUrl: state.baseUrl,
             token: state.token,
             username: state.username,

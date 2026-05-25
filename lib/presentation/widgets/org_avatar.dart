@@ -34,6 +34,7 @@ class OrgAvatar extends StatelessWidget {
         width: radius * 2,
         height: radius * 2,
         fit: BoxFit.cover,
+        semanticLabel: org.username,
         errorBuilder: (context, error, stackTrace) {
           return _buildFallback(theme, fallbackInitial);
         },

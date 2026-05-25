@@ -224,10 +224,13 @@ class _LoginPageState extends State<LoginPage>
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        Icons.code,
-                        size: 64,
-                        color: theme.colorScheme.primary,
+                      Semantics(
+                        label: l10n.appTitle,
+                        child: Icon(
+                          Icons.code,
+                          size: 64,
+                          color: theme.colorScheme.primary,
+                        ),
                       ),
                       const SizedBox(height: UIConstants.md),
                       Text(

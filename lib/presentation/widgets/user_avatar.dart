@@ -34,6 +34,7 @@ class UserAvatar extends StatelessWidget {
         width: radius * 2,
         height: radius * 2,
         fit: BoxFit.cover,
+        semanticLabel: user.login,
         errorBuilder: (context, error, stackTrace) {
           return _buildFallback(theme, fallbackInitial);
         },

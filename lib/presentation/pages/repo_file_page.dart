@@ -480,6 +480,7 @@ class _RepoFilePageState extends State<RepoFilePage> {
         return Center(
           child: Image.network(
             widget.downloadUrl!,
+            semanticLabel: 'Image preview',
             errorBuilder: (context, error, stackTrace) => _buildFallback(theme, l10n),
           ),
         );

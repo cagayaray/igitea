@@ -165,7 +165,7 @@ class ApiClient {
     String path, {
     Map<String, dynamic>? body,
   }) async {
-    final uri = Uri.parse(baseUrl).replace(path: path);
+    final uri = Uri.parse(baseUrl).resolve(path);
     try {
       final response = await _client
           .post(
@@ -265,8 +265,7 @@ class ApiClient {
   }
 
   Uri _buildUri(String path, Map<String, String>? query) {
-    return Uri.parse(baseUrl).replace(
-      path: apiVersionPath + path,
+    return Uri.parse(baseUrl).resolve(apiVersionPath + path).replace(
       queryParameters: query?.isNotEmpty == true ? query : null,
     );
   }
@@ -297,6 +296,8 @@ class ApiClient {
   void setCached(String cacheKey, String body, {Duration maxAge = const Duration(minutes: 5)}) {
     _cache[cacheKey] = _CachedResponse(body: body, expiry: DateTime.now().add(maxAge));
   }
+
+  void close() => _client.close();
 
   void clearCache() => _cache.clear();
 

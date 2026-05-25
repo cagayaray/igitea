@@ -839,6 +839,7 @@ class Injection {
     String? username,
     String? password,
   }) {
+    apiClient.close();
     apiClient = ApiClient(
       baseUrl: baseUrl ?? '',
       token: token,

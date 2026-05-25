@@ -533,11 +533,11 @@ class _PRContent extends StatelessWidget {
           if (renderBox == null) return;
           final position = renderBox.localToGlobal(Offset.zero);
           final size = renderBox.size;
-          late final OverlayEntry overlay;
+          late OverlayEntry overlay;
           overlay = OverlayEntry(
             builder: (ctx) => GestureDetector(
               onTap: () => overlay.remove(),
-              behavior: HitTestBehavior.translucent,
+              behavior: HitTestBehavior.opaque,
               child: Stack(
                 children: [
                   Positioned(
@@ -742,19 +742,26 @@ class _PRContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.commentsParams(comments.length),
-          style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        ...comments.asMap().entries.map((entry) => FadeInWrapper(
-          delay: Duration(milliseconds: entry.key * 30),
-          child: _CommentItem(
-            comment: entry.value,
-            owner: owner,
-            repo: repo,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Text(
+            l10n.commentsParams(comments.length),
+            style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
-        )),
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: comments.length,
+          itemBuilder: (context, i) => FadeInWrapper(
+            delay: Duration(milliseconds: i * 30),
+            child: _CommentItem(
+              comment: comments[i],
+              owner: owner,
+              repo: repo,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -1034,11 +1041,11 @@ class _CommentPickReactionButtonState extends State<_CommentPickReactionButton> 
           if (renderBox == null) return;
           final position = renderBox.localToGlobal(Offset.zero);
           final size = renderBox.size;
-          late final OverlayEntry overlay;
+          late OverlayEntry overlay;
           overlay = OverlayEntry(
             builder: (ctx) => GestureDetector(
               onTap: () => overlay.remove(),
-              behavior: HitTestBehavior.translucent,
+              behavior: HitTestBehavior.opaque,
               child: Stack(
                 children: [
                   Positioned(
@@ -1089,9 +1096,12 @@ class _CommentPickReactionButtonState extends State<_CommentPickReactionButton> 
           );
           Overlay.of(context).insert(overlay);
         },
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-          child: Icon(Icons.emoji_emotions_outlined, size: 16),
+        child: Semantics(
+          label: 'Add reaction',
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+            child: Icon(Icons.emoji_emotions_outlined, size: 16),
+          ),
         ),
       ),
     );

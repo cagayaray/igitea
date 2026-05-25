@@ -671,7 +671,7 @@ class _IssueContent extends StatelessWidget {
               if (renderBox == null) return;
               final position = renderBox.localToGlobal(Offset.zero);
               final size = renderBox.size;
-              late final OverlayEntry overlay;
+              late OverlayEntry overlay;
               overlay = OverlayEntry(
                 builder: (ctx) => GestureDetector(
                   onTap: () => overlay.remove(),
@@ -726,15 +726,18 @@ class _IssueContent extends StatelessWidget {
               );
               Overlay.of(context).insert(overlay);
             },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.emoji_emotions_outlined, size: 18),
-                  SizedBox(width: 1),
-                  Icon(Icons.add, size: 10),
-                ],
+            child: Semantics(
+              label: 'Add reaction',
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.emoji_emotions_outlined, size: 18),
+                    SizedBox(width: 1),
+                    Icon(Icons.add, size: 10),
+                  ],
+                ),
               ),
             ),
           ),
@@ -775,7 +778,7 @@ class _IssueContent extends StatelessWidget {
 
   Widget _buildCommentsList(BuildContext context, List<Comment> comments, {bool hasMore = false, required AppLocalizations l10n}) {
     if (comments.isEmpty) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     final theme = Theme.of(context);
@@ -801,30 +804,39 @@ class _IssueContent extends StatelessWidget {
                 ],
               ),
             ),
-        ...comments.asMap().entries.map((entry) => FadeInWrapper(
-          delay: Duration(milliseconds: entry.key * 30),
-          child: _CommentItem(
-            comment: entry.value,
-            isCurrentUser: currentUserId != null && entry.value.user?.id == currentUserId,
-            owner: owner,
-            repo: repo,
-            index: index,
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: comments.length + (hasMore ? 1 : 0),
+            itemBuilder: (context, i) {
+              if (hasMore && i == comments.length) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Center(
+                    child: Injection.issueNotifier.commentLoadingMore
+                        ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(strokeWidth: 2))
+                        : TextButton(
+                            onPressed: () => Injection.issueNotifier.loadMoreComments(owner, repo, index),
+                            child: const Text('Load more comments'),
+                          ),
+                  ),
+                );
+              }
+              return FadeInWrapper(
+                delay: Duration(milliseconds: i * 30),
+                child: _CommentItem(
+                  comment: comments[i],
+                  isCurrentUser: currentUserId != null && comments[i].user?.id == currentUserId,
+                  owner: owner,
+                  repo: repo,
+                  index: index,
+                ),
+              );
+            },
           ),
-        )),
-        if (hasMore)
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Center(
-              child: Injection.issueNotifier.commentLoadingMore
-                  ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(strokeWidth: 2))
-                  : TextButton(
-                      onPressed: () => Injection.issueNotifier.loadMoreComments(owner, repo, index),
-                      child: const Text('Load more comments'),
-                    ),
-            ),
-          ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 
   Widget _buildInfoRow(
@@ -1138,6 +1150,7 @@ class _CommentItemState extends State<_CommentItem> {
           if (!isMe) const SizedBox(width: 10),
           Flexible(
             child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onLongPress: isMe && !_editing
                   ? () {
                       final renderBox = context.findRenderObject() as RenderBox;

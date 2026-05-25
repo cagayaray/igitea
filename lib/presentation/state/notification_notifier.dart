@@ -130,9 +130,8 @@ class NotificationNotifier extends ChangeNotifier {
       MarkThreadReadParams(id: id, to_status: to_status),
     );
     switch (result) {
-      case Left<Failure, void>(:final value):
-        _state = NotificationError(value.message);
-        notifyListeners();
+      case Left<Failure, void>():
+        break;
       case Right<Failure, void>():
         break;
     }
@@ -141,9 +140,8 @@ class NotificationNotifier extends ChangeNotifier {
   Future<void> markAllRead() async {
     final result = await _markNotificationsReadUseCase.call();
     switch (result) {
-      case Left<Failure, void>(:final value):
-        _state = NotificationError(value.message);
-        notifyListeners();
+      case Left<Failure, void>():
+        break;
       case Right<Failure, void>():
         await listNotifications();
     }

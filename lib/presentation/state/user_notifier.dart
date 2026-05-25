@@ -108,16 +108,20 @@ class UserNotifier extends ChangeNotifier {
   List<Repository> _repos = [];
   List<Repository> get repos => _repos;
 
+  String? _reposError;
+  String? get reposError => _reposError;
+
   Future<void> listCurrentUserRepos({int? page, int? limit}) async {
     final result = await _listCurrentUserReposUseCase.call(
       ListCurrentUserReposParams(page: page, limit: limit),
     );
     switch (result) {
       case Left<Failure, List<Repository>>(:final value):
-        _state = UserError(value.message);
+        _reposError = value.message;
         notifyListeners();
       case Right<Failure, List<Repository>>(:final value):
         _repos = value;
+        _reposError = null;
         notifyListeners();
     }
   }

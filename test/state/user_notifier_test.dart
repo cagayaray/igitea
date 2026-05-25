@@ -238,14 +238,14 @@ void main() {
         expect(notifier.repos[1].name, 'repo2');
       });
 
-      test('sets UserError on failure', () async {
+      test('sets reposError on failure without corrupting state', () async {
         fakeRepo.shouldFailListCurrentUserRepos = true;
         fakeRepo.failure = const ServerFailure('server error');
 
         await notifier.listCurrentUserRepos();
 
-        expect(notifier.state, isA<UserError>());
-        expect((notifier.state as UserError).message, 'server error');
+        expect(notifier.state, isA<UserInitial>());
+        expect(notifier.reposError, 'server error');
       });
 
       test('notifies listeners on success', () async {

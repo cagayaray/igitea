@@ -226,26 +226,28 @@ class _SshKeysPageState extends State<SshKeysPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.addSshKey),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: titleController,
-              decoration: InputDecoration(
-                labelText: l10n.title,
-                hintText: l10n.myLaptopHint,
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: titleController,
+                decoration: InputDecoration(
+                  labelText: l10n.title,
+                  hintText: l10n.myLaptopHint,
+                ),
               ),
-            ),
-            const SizedBox(height: UIConstants.md),
-            TextField(
-              controller: keyController,
-              decoration: InputDecoration(
-                labelText: l10n.publicKey,
-                hintText: l10n.sshPublicKeyHint,
+              const SizedBox(height: UIConstants.md),
+              TextField(
+                controller: keyController,
+                decoration: InputDecoration(
+                  labelText: l10n.publicKey,
+                  hintText: l10n.sshPublicKeyHint,
+                ),
+                maxLines: 5,
               ),
-              maxLines: 5,
-            ),
-          ],
+            ],
+          ),
         ),
         actions: [
           TextButton(

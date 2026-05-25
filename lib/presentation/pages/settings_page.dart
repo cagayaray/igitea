@@ -59,10 +59,46 @@ class _SettingsPageState extends State<SettingsPage> {
     if (!mounted) return;
 
     setState(() {
-      _apiSettings = (results[0] as Right<Failure, GeneralAPISettings>).value;
-      _uiSettings = (results[1] as Right<Failure, GeneralUISettings>).value;
-      _attachmentSettings = (results[2] as Right<Failure, GeneralAttachmentSettings>).value;
-      _repoSettings = (results[3] as Right<Failure, GeneralRepoSettings>).value;
+      switch (results[0]) {
+        case Right<Failure, GeneralAPISettings>(value: final v):
+          _apiSettings = v;
+        case Left<Failure, GeneralAPISettings>(value: final f):
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(f.message)),
+          );
+        default:
+          break;
+      }
+      switch (results[1]) {
+        case Right<Failure, GeneralUISettings>(value: final v):
+          _uiSettings = v;
+        case Left<Failure, GeneralUISettings>(value: final f):
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(f.message)),
+          );
+        default:
+          break;
+      }
+      switch (results[2]) {
+        case Right<Failure, GeneralAttachmentSettings>(value: final v):
+          _attachmentSettings = v;
+        case Left<Failure, GeneralAttachmentSettings>(value: final f):
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(f.message)),
+          );
+        default:
+          break;
+      }
+      switch (results[3]) {
+        case Right<Failure, GeneralRepoSettings>(value: final v):
+          _repoSettings = v;
+        case Left<Failure, GeneralRepoSettings>(value: final f):
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(f.message)),
+          );
+        default:
+          break;
+      }
       _settingsLoading = false;
     });
   }

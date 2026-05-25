@@ -19,6 +19,38 @@
 
 ## [Unreleased]
 
+### Audited
+- **Parallel 6-expert code audit**: framework, business logic, rendering, gestures, input, accessibility
+  - 62 issues identified (4 P0 critical, 24 P1 high, 34 P2 medium)
+  - Full report: `PARALLEL_AUDIT_REPORT.md`
+  - Key P0 findings: ApiClient memory leak, compile error in createComment, settings page crash, missing search debounce
+
+### Fixed
+- **ApiClient memory leak** [P0]: Added `close()` method, old client disposed in `updateAuth()`, rebuild dedup in `app.dart`
+- **Settings page crash** [P0]: Replaced blind `Right` casts with proper `Either` pattern matching + error SnackBars
+- **Search debounce** [P0]: Added 300ms Timer debounce to `IssueListPage` SearchBar
+- **Unawaited async init** [P1]: Added `.catchError(debugPrint)` to `_tryRestoreSession`, `loadThemeMode`, `loadLocale`
+- **Swallowed API exceptions** [P1]: Changed broad `catch (_)` to specific `on AuthenticationException` / `on NotFoundException` in 3 check methods
+- **Base URL path stripping** [P1]: Changed `Uri.replace(path:)` to `Uri.resolve()` for sub-path support
+- **UserNotifier state corruption** [P1]: `listCurrentUserRepos` error no longer overwrites profile state; uses `_reposError` field
+- **Notification list destruction** [P1]: `markThreadRead`/`markAllRead` errors no longer replace entire list with error state
+- **Dead buttons** [P1]: Fixed empty `onPressed` in `tag_detail_page` (added url_launcher) and `search_page` retry
+- **SafeArea double inset** [P1]: Removed manual bottom padding from filter bottom sheets
+- **Fragile OverlayEntry** [P1]: Changed `late final` to `late` in issue/PR detail overlay
+- **Duplicate methods** [P1]: Removed unused `_create()` from `tag_protections_page`
+- **Hardcoded date strings** [P1]: Replaced with ARB-localized strings (`yearsAgo`, `monthsAgo`, `daysAgo`, `hoursAgo`, `justNow`)
+- **Missing loading placeholder** [P1]: Added `loadingBuilder` to admin badges `Image.network`
+- **Gesture conflicts** [P1]: Added `HitTestBehavior.opaque` to long-press detectors in issue/PR detail
+- **Lazy loading comments** [P1]: Replaced eager `Column` with `ListView.builder` (shrinkWrap + NeverScrollableScrollPhysics)
+- **Repo issues search debounce** [P1]: Added 300ms Timer debounce
+- **Keyboard dismiss** [P1]: Added `textInputAction.search` + `FocusScope.unfocus()` to search page
+- **Keyboard hides dialog** [P1]: Wrapped SSH key dialog in `SingleChildScrollView`
+- **Avatar alt text** [P1]: Added `semanticLabel` to `UserAvatar` and `OrgAvatar`
+- **Image preview alt text** [P1]: Added `semanticLabel` to `repo_file_page` image preview
+- **Login logo semantics** [P1]: Wrapped logo in `Semantics(label: l10n.appTitle)`
+- **Action icon tooltips** [P1]: Added `Tooltip` to topic edit icon
+- **Reaction picker accessibility** [P1]: Added `Semantics(label: 'Add reaction')` to reaction buttons
+
 ### Added
 - **Issue List advanced filters**: labels, milestones, type, assignee, created by me, mentioned me
   - Touch-friendly BottomSheet UI with drag handle, apply/reset actions

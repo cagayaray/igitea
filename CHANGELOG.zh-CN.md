@@ -2,6 +2,38 @@
 
 ## [Unreleased]
 
+### Audited
+- **并行6专家代码审计**：框架层、业务逻辑、渲染层、手势交互、输入体验、无障碍访问
+  - 识别62个问题（4个P0关键、24个P1高优、34个P2中优）
+  - 完整报告：`PARALLEL_AUDIT_REPORT.md`
+  - 关键P0发现：ApiClient内存泄漏、createComment编译错误、设置页崩溃、搜索缺少防抖
+
+### Fixed
+- **ApiClient内存泄漏** [P0]：新增`close()`方法，`updateAuth()`中释放旧client，`app.dart`中重建去重
+- **设置页崩溃** [P0]：将盲目`Right`强转改为`Either`模式匹配+错误SnackBar
+- **搜索防抖** [P0]：`IssueListPage`搜索栏新增300ms定时器防抖
+- **未等待的异步初始化** [P1]：为`_tryRestoreSession`、`loadThemeMode`、`loadLocale`添加`.catchError(debugPrint)`
+- **吞掉的API异常** [P1]：3个check方法中`catch (_)`改为`on AuthenticationException` / `on NotFoundException`
+- **基础URL路径丢失** [P1]：`Uri.replace(path:)`改为`Uri.resolve()`以支持子路径
+- **UserNotifier状态污染** [P1]：`listCurrentUserRepos`错误不再覆盖profile状态，改用`_reposError`字段
+- **通知列表销毁** [P1]：`markThreadRead`/`markAllRead`错误不再用error state替换整个列表
+- **无效按钮** [P1]：修复`tag_detail_page`空`onPressed`（添加url_launcher）和`search_page`重试按钮
+- **SafeArea双重内边距** [P1]：移除筛选BottomSheet的手动底部padding
+- **脆弱的OverlayEntry** [P1]：issue/PR详情中的`late final`改为`late`
+- **重复方法** [P1]：移除`tag_protections_page`中未使用的`_create()`
+- **硬编码日期字符串** [P1]：替换为ARB本地化字符串（`yearsAgo`、`monthsAgo`、`daysAgo`、`hoursAgo`、`justNow`）
+- **缺少加载占位** [P1]：admin badges的`Image.network`添加`loadingBuilder`
+- **手势冲突** [P1]：issue/PR详情长按检测器添加`HitTestBehavior.opaque`
+- **评论懒加载** [P1]：eager `Column`替换为`ListView.builder`（shrinkWrap + NeverScrollableScrollPhysics）
+- **Repo issues搜索防抖** [P1]：新增300ms定时器防抖
+- **键盘收起** [P1]：搜索页添加`textInputAction.search` + `FocusScope.unfocus()`
+- **键盘遮挡对话框** [P1]：SSH key对话框包裹`SingleChildScrollView`
+- **头像alt文本** [P1]：`UserAvatar`和`OrgAvatar`添加`semanticLabel`
+- **图片预览alt文本** [P1]：`repo_file_page`图片预览添加`semanticLabel`
+- **登录logo语义** [P1]：logo包裹`Semantics(label: l10n.appTitle)`
+- **操作图标提示** [P1]：topic编辑图标添加`Tooltip`
+- **反应按钮无障碍** [P1]：反应按钮添加`Semantics(label: 'Add reaction')`
+
 ### Added
 - **Issue List 高级筛选**：标签、里程碑、类型、指派给我、我创建的、提及我的
   - 触屏友好的 BottomSheet 交互，支持拖拽关闭、应用/重置按钮

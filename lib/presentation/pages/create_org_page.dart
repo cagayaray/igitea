@@ -122,46 +122,52 @@ class _CreateOrgPageState extends State<CreateOrgPage> {
               },
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
               controller: _fullNameController,
               decoration: InputDecoration(
                 labelText: l10n.fullName,
                 border: const OutlineInputBorder(),
               ),
+              textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
               controller: _descriptionController,
               decoration: InputDecoration(
                 labelText: l10n.description,
                 border: const OutlineInputBorder(),
               ),
               maxLines: 3,
+              textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
               controller: _locationController,
               decoration: InputDecoration(
                 labelText: l10n.location,
                 border: const OutlineInputBorder(),
               ),
+              textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
               controller: _websiteController,
               decoration: InputDecoration(
                 labelText: l10n.website,
                 border: const OutlineInputBorder(),
               ),
+              keyboardType: TextInputType.url,
+              textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
               controller: _emailController,
               decoration: InputDecoration(
                 labelText: l10n.email,
                 border: const OutlineInputBorder(),
               ),
               keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.done,
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(

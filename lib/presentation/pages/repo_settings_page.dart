@@ -76,6 +76,7 @@ class _RepoSettingsPageState extends State<RepoSettingsPage> {
               labelText: l10n.website,
               border: const OutlineInputBorder(),
             ),
+            keyboardType: TextInputType.url,
           ),
           const SizedBox(height: 16),
           Card(

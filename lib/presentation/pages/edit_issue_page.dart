@@ -188,13 +188,19 @@ class _EditIssuePageState extends State<EditIssuePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
+            TextFormField(
               controller: _titleController,
               decoration: InputDecoration(
                 labelText: l10n.title,
                 border: const OutlineInputBorder(),
               ),
               maxLines: 1,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return l10n.requiredField;
+                }
+                return null;
+              },
             ),
             const SizedBox(height: UIConstants.md),
             _buildStateSelector(l10n),

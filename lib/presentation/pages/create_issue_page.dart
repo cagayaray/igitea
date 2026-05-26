@@ -92,13 +92,19 @@ class _CreateIssuePageState extends State<CreateIssuePage> {
         padding: const EdgeInsets.all(UIConstants.md),
         child: Column(
           children: [
-            TextField(
+            TextFormField(
               controller: _titleController,
               decoration: InputDecoration(
                 labelText: l10n.title,
                 border: const OutlineInputBorder(),
               ),
               textInputAction: TextInputAction.next,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return l10n.requiredField;
+                }
+                return null;
+              },
             ),
             const SizedBox(height: UIConstants.md),
             if (!_labelsLoading && _labels.isNotEmpty) ...[

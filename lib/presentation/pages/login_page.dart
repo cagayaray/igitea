@@ -321,6 +321,7 @@ class _LoginPageState extends State<LoginPage>
             textInputAction: TextInputAction.next,
             validator: (value) => _validateUrl(value, l10n),
             enabled: !isLoading,
+            autofillHints: const [AutofillHints.url],
           ),
           const SizedBox(height: UIConstants.md),
           TextFormField(
@@ -339,6 +340,7 @@ class _LoginPageState extends State<LoginPage>
               return null;
             },
             enabled: !isLoading,
+            autofillHints: const [AutofillHints.username],
           ),
           const SizedBox(height: UIConstants.md),
           TextFormField(
@@ -368,6 +370,7 @@ class _LoginPageState extends State<LoginPage>
               }
               return null;
             },
+            autofillHints: const [AutofillHints.password],
             enabled: !isLoading,
           ),
           const SizedBox(height: UIConstants.lg),
@@ -476,6 +479,8 @@ class _LoginPageState extends State<LoginPage>
               border: const OutlineInputBorder(),
             ),
             keyboardType: TextInputType.url,
+            textInputAction: TextInputAction.next,
+            validator: (value) => _validateUrl(value, l10n),
             enabled: !isLoading,
           ),
           const SizedBox(height: UIConstants.sm),
@@ -485,6 +490,13 @@ class _LoginPageState extends State<LoginPage>
               labelText: l10n.oauth2ClientId,
               border: const OutlineInputBorder(),
             ),
+            textInputAction: TextInputAction.next,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return l10n.requiredField;
+              }
+              return null;
+            },
             enabled: !isLoading,
           ),
           const SizedBox(height: UIConstants.sm),
@@ -494,6 +506,13 @@ class _LoginPageState extends State<LoginPage>
               labelText: l10n.oauth2ClientSecret,
               border: const OutlineInputBorder(),
             ),
+            textInputAction: TextInputAction.next,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return l10n.requiredField;
+              }
+              return null;
+            },
             enabled: !isLoading,
           ),
           const SizedBox(height: UIConstants.sm),
@@ -504,6 +523,14 @@ class _LoginPageState extends State<LoginPage>
               hintText: l10n.oauth2RedirectUriHint,
               border: const OutlineInputBorder(),
             ),
+            textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.url,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return l10n.requiredField;
+              }
+              return null;
+            },
             enabled: !isLoading,
           ),
           const SizedBox(height: UIConstants.md),
@@ -523,6 +550,13 @@ class _LoginPageState extends State<LoginPage>
               hintText: l10n.oauth2AuthorizationCodeHint,
               border: const OutlineInputBorder(),
             ),
+            textInputAction: TextInputAction.done,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return l10n.requiredField;
+              }
+              return null;
+            },
             enabled: !isLoading && !_oauthCodeExchanging,
           ),
           const SizedBox(height: UIConstants.md),

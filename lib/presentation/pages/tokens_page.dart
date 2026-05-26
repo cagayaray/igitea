@@ -503,6 +503,7 @@ class _CreateTokenDialogState extends State<_CreateTokenDialog> {
                       labelText: l10n.tokenName,
                       border: const OutlineInputBorder(),
                     ),
+                    maxLength: 255,
                   ),
               const SizedBox(height: 8),
               Row(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../core/constants/ui_constants.dart';
 import '../../core/di/injection.dart';
@@ -138,6 +139,7 @@ class _CreateRepoPageState extends State<CreateRepoPage> {
                 return null;
               },
               textInputAction: TextInputAction.next,
+              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9_.-]'))],
             ),
             const SizedBox(height: UIConstants.md),
             TextFormField(

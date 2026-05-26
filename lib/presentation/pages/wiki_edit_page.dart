@@ -151,6 +151,7 @@ class _WikiEditPageState extends State<WikiEditPage> {
               hintText: l10n.wikiPageTitleHint,
               border: const OutlineInputBorder(),
             ),
+            maxLength: 100,
             enabled: widget.pageName == null,
           ),
           const SizedBox(height: UIConstants.md),

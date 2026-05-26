@@ -230,12 +230,19 @@ class _SshKeysPageState extends State<SshKeysPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
+              TextFormField(
                 controller: titleController,
                 decoration: InputDecoration(
                   labelText: l10n.title,
                   hintText: l10n.myLaptopHint,
                 ),
+                maxLength: 255,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return l10n.requiredField;
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: UIConstants.md),
               TextField(

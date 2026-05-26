@@ -102,15 +102,21 @@ class _EditTeamPageState extends State<EditTeamPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
+            TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
                 labelText: l10n.teamName,
                 border: const OutlineInputBorder(),
               ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return l10n.requiredField;
+                }
+                return null;
+              },
             ),
             const SizedBox(height: UIConstants.md),
-            TextField(
+            TextFormField(
               controller: _descController,
               decoration: InputDecoration(
                 labelText: l10n.teamDescription,

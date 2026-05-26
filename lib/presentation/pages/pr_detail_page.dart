@@ -44,18 +44,29 @@ class PRDetailPage extends StatefulWidget {
 
 class _PRDetailPageState extends State<PRDetailPage> {
   final _commentController = TextEditingController();
+  final _scrollController = ScrollController();
   List<PullReview> _reviews = [];
   List<Reaction> _prReactions = [];
 
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Injection.repoNotifier.getPullRequest(widget.owner, widget.repo, widget.index);
       Injection.issueNotifier.listComments(widget.owner, widget.repo, widget.index);
       _loadReviews();
       _refreshPrReactions();
     });
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (currentScroll >= maxScroll - 200) {
+      Injection.issueNotifier.loadMoreComments(widget.owner, widget.repo, widget.index);
+    }
   }
 
   Future<void> _refreshPrReactions() async {
@@ -105,6 +116,8 @@ class _PRDetailPageState extends State<PRDetailPage> {
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
     _commentController.dispose();
     super.dispose();
   }
@@ -176,6 +189,7 @@ class _PRDetailPageState extends State<PRDetailPage> {
               repo: widget.repo,
               index: widget.index,
               commentController: _commentController,
+              scrollController: _scrollController,
               reviews: _reviews,
               prReactions: _prReactions,
               onToggleReaction: _togglePrReaction,
@@ -194,6 +208,7 @@ class _PRContent extends StatelessWidget {
   final String repo;
   final int index;
   final TextEditingController commentController;
+  final ScrollController scrollController;
   final List<PullReview> reviews;
   final List<Reaction> prReactions;
   final Future<void> Function(String) onToggleReaction;
@@ -204,6 +219,7 @@ class _PRContent extends StatelessWidget {
     required this.repo,
     required this.index,
     required this.commentController,
+    required this.scrollController,
     required this.reviews,
     required this.prReactions,
     required this.onToggleReaction,
@@ -216,6 +232,7 @@ class _PRContent extends StatelessWidget {
     final (stateText, stateColor) = _getStateInfo(l10n);
 
     return SingleChildScrollView(
+      controller: scrollController,
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

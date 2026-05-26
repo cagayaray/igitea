@@ -46,6 +46,7 @@ class IssueDetailPage extends StatefulWidget {
 
 class _IssueDetailPageState extends State<IssueDetailPage> {
   final _commentController = TextEditingController();
+  final _scrollController = ScrollController();
   bool _isSubscribed = false;
   bool _subscriptionLoading = false;
   List<Reaction> _issueReactions = [];
@@ -53,6 +54,7 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Injection.issueNotifier.getIssue(widget.owner, widget.repo, widget.index);
       Injection.issueNotifier.listComments(widget.owner, widget.repo, widget.index);
@@ -60,6 +62,15 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
       _checkSubscription();
       _refreshIssueReactions();
     });
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (currentScroll >= maxScroll - 200) {
+      Injection.issueNotifier.loadMoreComments(widget.owner, widget.repo, widget.index);
+    }
   }
 
   Future<void> _refreshIssueReactions() async {
@@ -184,6 +195,8 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
     _commentController.dispose();
     super.dispose();
   }
@@ -253,6 +266,7 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
               repo: widget.repo,
               index: widget.index,
               commentController: _commentController,
+              scrollController: _scrollController,
               isSubscribed: _isSubscribed,
               subscriptionLoading: _subscriptionLoading,
               onToggleSubscription: _toggleSubscription,
@@ -274,6 +288,7 @@ class _IssueContent extends StatelessWidget {
   final String repo;
   final int index;
   final TextEditingController commentController;
+  final ScrollController scrollController;
   final bool isSubscribed;
   final bool subscriptionLoading;
   final VoidCallback onToggleSubscription;
@@ -287,6 +302,7 @@ class _IssueContent extends StatelessWidget {
     required this.repo,
     required this.index,
     required this.commentController,
+    required this.scrollController,
     required this.isSubscribed,
     required this.subscriptionLoading,
     required this.onToggleSubscription,
@@ -302,6 +318,7 @@ class _IssueContent extends StatelessWidget {
     final isOpen = issue.state?.isOpen == true;
 
     return SingleChildScrollView(
+      controller: scrollController,
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

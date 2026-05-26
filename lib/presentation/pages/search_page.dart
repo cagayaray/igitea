@@ -162,15 +162,18 @@ class _SearchPageState extends State<SearchPage>
             child: Row(
               children: [
                 Expanded(
-                  child: SearchBar(
-                    controller: _searchController,
-                    hintText: l10n.search,
-                    leading: const Icon(Icons.search),
-                    textInputAction: TextInputAction.search,
-                    onSubmitted: (_) {
-                      _onSearch();
-                      FocusScope.of(context).unfocus();
-                    },
+                  child: Semantics(
+                    label: l10n.search,
+                    child: SearchBar(
+                      controller: _searchController,
+                      hintText: l10n.search,
+                      leading: const Icon(Icons.search),
+                      textInputAction: TextInputAction.search,
+                      onSubmitted: (_) {
+                        _onSearch();
+                        FocusScope.of(context).unfocus();
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(width: UIConstants.sm),

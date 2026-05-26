@@ -74,12 +74,15 @@ class _HomePageState extends State<HomePage> {
       selectedIndex: _selectedIndex,
       onDestinationSelected: _onDestinationSelected,
       labelType: NavigationRailLabelType.all,
-      leading: Padding(
-        padding: const EdgeInsets.symmetric(vertical: UIConstants.md),
-        child: Icon(
-          Icons.code,
-          color: theme.colorScheme.primary,
-          size: 32,
+      leading: Semantics(
+        excludeSemantics: true,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: UIConstants.md),
+          child: Icon(
+            Icons.code,
+            color: theme.colorScheme.primary,
+            size: 32,
+          ),
         ),
       ),
       destinations: [

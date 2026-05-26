@@ -228,7 +228,7 @@ class _NotificationList extends StatelessWidget {
                     ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(strokeWidth: 2))
                     : TextButton(
                         onPressed: () => Injection.notificationNotifier.loadMoreNotifications(),
-                        child: const Text('Load more'),
+                        child: Text(l10n.loadMore),
                       ),
               ),
             );

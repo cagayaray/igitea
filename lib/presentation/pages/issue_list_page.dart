@@ -143,20 +143,21 @@ class _IssueListPageState extends State<IssueListPage> {
 
   Future<void> _saveCurrentFilter() async {
     final notifier = Injection.issueNotifier;
+    final l10n = AppLocalizations.of(context)!;
     final filterState = notifier.issuesListFilter ?? 'open';
     final controller = TextEditingController();
     final name = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Save Filter'),
+        title: Text(l10n.saveFilter),
         content: TextField(
           controller: controller,
-          decoration: const InputDecoration(hintText: 'Filter name'),
+          decoration: InputDecoration(hintText: l10n.filterName),
           autofocus: true,
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-          FilledButton(onPressed: () => Navigator.pop(ctx, controller.text), child: const Text('Save')),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
+          FilledButton(onPressed: () => Navigator.pop(ctx, controller.text), child: Text(l10n.save)),
         ],
       ),
     );

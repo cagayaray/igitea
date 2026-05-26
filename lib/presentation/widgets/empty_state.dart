@@ -44,7 +44,17 @@ class _EmptyStateState extends State<EmptyState>
       CurvedAnimation(parent: _controller, curve: AppAnimations.easeOut),
     );
 
-    _controller.forward();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _controller.forward();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.of(context).disableAnimations) {
+      _controller.value = 1.0;
+    }
   }
 
   @override
@@ -66,10 +76,13 @@ class _EmptyStateState extends State<EmptyState>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  widget.icon,
-                  size: 48,
-                  color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                Semantics(
+                  excludeSemantics: true,
+                  child: Icon(
+                    widget.icon,
+                    size: 48,
+                    color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Text(

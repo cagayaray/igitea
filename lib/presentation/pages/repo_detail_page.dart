@@ -2026,15 +2026,21 @@ class _SectionListTile extends StatelessWidget {
         size: UIConstants.iconMd,
         color: theme.colorScheme.primary,
       ),
-      title: Text(
-        section.title,
-        style: theme.textTheme.bodyLarge?.copyWith(
-          fontWeight: FontWeight.w500,
+      title: Semantics(
+        headingLevel: 2,
+        child: Text(
+          section.title,
+          style: theme.textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
-      trailing: Icon(
-        Icons.chevron_right,
-        color: theme.colorScheme.onSurfaceVariant,
+      trailing: Semantics(
+        excludeSemantics: true,
+        child: Icon(
+          Icons.chevron_right,
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
       ),
       onTap: onTap,
     );

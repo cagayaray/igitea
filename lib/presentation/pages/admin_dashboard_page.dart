@@ -94,7 +94,7 @@ class _AdminFeatureCard extends StatelessWidget {
       child: ListTile(
         leading: Icon(icon, color: theme.colorScheme.primary),
         title: Text(title),
-        trailing: Icon(Icons.chevron_right, color: theme.colorScheme.onSurfaceVariant),
+        trailing: Semantics(excludeSemantics: true, child: Icon(Icons.chevron_right, color: theme.colorScheme.onSurfaceVariant)),
         onTap: onTap,
       ),
     );

@@ -511,6 +511,8 @@
   "subscribed": "Subscribed",
   "unsubscribed": "Unsubscribed",
   "setDueDate": "Set Due Date",
+  "editDueDate": "Edit Due Date",
+  "clearDueDate": "Clear Due Date",
   "removeDueDate": "Remove Due Date",
   "topics": "Topics",
   "noTopics": "No topics",
@@ -762,5 +764,7 @@
   "largest": "Largest",
   "privateReposOnly": "Private repositories only",
   "includeArchived": "Include archived",
-  "templatesOnly": "Templates only"
+  "templatesOnly": "Templates only",
+  "loadMore": "Load more",
+  "saveFilter": "Save Filter"
 }

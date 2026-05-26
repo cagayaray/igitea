@@ -1613,6 +1613,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get setDueDate => '设置截止日期';
 
   @override
+  String get editDueDate => 'Edit Due Date';
+
+  @override
+  String get clearDueDate => 'Clear Due Date';
+
+  @override
   String get removeDueDate => '移除截止日期';
 
   @override
@@ -2353,6 +2359,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get templatesOnly => '仅模板';
+
+  @override
+  String get loadMore => '加载更多';
+
+  @override
+  String get saveFilter => '保存筛选';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

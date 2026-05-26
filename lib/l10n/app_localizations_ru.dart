@@ -1635,6 +1635,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get setDueDate => 'Установить срок';
 
   @override
+  String get editDueDate => 'Edit Due Date';
+
+  @override
+  String get clearDueDate => 'Clear Due Date';
+
+  @override
   String get removeDueDate => 'Удалить срок';
 
   @override
@@ -2382,4 +2388,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get templatesOnly => 'Templates only';
+
+  @override
+  String get loadMore => 'Load more';
+
+  @override
+  String get saveFilter => 'Save Filter';
 }

@@ -3185,6 +3185,18 @@ abstract class AppLocalizations {
   /// **'Set Due Date'**
   String get setDueDate;
 
+  /// No description provided for @editDueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Due Date'**
+  String get editDueDate;
+
+  /// No description provided for @clearDueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Due Date'**
+  String get clearDueDate;
+
   /// No description provided for @removeDueDate.
   ///
   /// In en, this message translates to:
@@ -4648,6 +4660,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Templates only'**
   String get templatesOnly;
+
+  /// No description provided for @loadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get loadMore;
+
+  /// No description provided for @saveFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Filter'**
+  String get saveFilter;
 }
 
 class _AppLocalizationsDelegate

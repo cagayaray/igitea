@@ -1613,6 +1613,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get setDueDate => '마감일 설정';
 
   @override
+  String get editDueDate => 'Edit Due Date';
+
+  @override
+  String get clearDueDate => 'Clear Due Date';
+
+  @override
   String get removeDueDate => '마감일 제거';
 
   @override
@@ -2354,4 +2360,10 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get templatesOnly => 'Templates only';
+
+  @override
+  String get loadMore => 'Load more';
+
+  @override
+  String get saveFilter => 'Save Filter';
 }

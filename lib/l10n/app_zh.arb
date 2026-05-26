@@ -752,5 +752,7 @@
   "largest": "最大",
   "privateReposOnly": "仅私有仓库",
   "includeArchived": "包含归档仓库",
-  "templatesOnly": "仅模板"
+  "templatesOnly": "仅模板",
+  "loadMore": "加载更多",
+  "saveFilter": "保存筛选"
 }

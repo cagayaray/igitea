@@ -1641,6 +1641,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get setDueDate => 'Establecer fecha de vencimiento';
 
   @override
+  String get editDueDate => 'Edit Due Date';
+
+  @override
+  String get clearDueDate => 'Clear Due Date';
+
+  @override
   String get removeDueDate => 'Eliminar fecha de vencimiento';
 
   @override
@@ -2390,4 +2396,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get templatesOnly => 'Templates only';
+
+  @override
+  String get loadMore => 'Load more';
+
+  @override
+  String get saveFilter => 'Save Filter';
 }

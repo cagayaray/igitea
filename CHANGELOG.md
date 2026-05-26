@@ -19,6 +19,8 @@
 
 ## [Unreleased]
 
+## [0.34.0] - 2026-05-26
+
 ### Audited
 - **Parallel 6-expert code audit**: framework, business logic, rendering, gestures, input, accessibility
   - 62 issues identified (4 P0 critical, 24 P1 high, 34 P2 medium)

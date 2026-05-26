@@ -210,6 +210,16 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
     return false;
   }
 
+  Future<void> _onRefresh() async {
+    await Future.wait([
+      Injection.issueNotifier.getIssue(widget.owner, widget.repo, widget.index),
+      Injection.issueNotifier.listComments(widget.owner, widget.repo, widget.index),
+      Injection.repoNotifier.getRepo(widget.owner, widget.repo),
+    ]);
+    await _checkSubscription();
+    await _refreshIssueReactions();
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -237,30 +247,32 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
             ),
         ],
       ),
-      body: ListenableBuilder(
-        listenable: Injection.issueNotifier,
-        builder: (context, _) {
-          final state = Injection.issueNotifier.state;
-          return switch (state) {
-            IssueLoading() => const Center(child: CircularProgressIndicator()),
-            IssueError(:final message) => Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('${l10n.error}: $message'),
-                  const SizedBox(height: 16),
-                  FilledButton(
-                    onPressed: () => Injection.issueNotifier.getIssue(
-                      widget.owner,
-                      widget.repo,
-                      widget.index,
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: ListenableBuilder(
+          listenable: Injection.issueNotifier,
+          builder: (context, _) {
+            final state = Injection.issueNotifier.state;
+            return switch (state) {
+              IssueLoading() => const Center(child: CircularProgressIndicator()),
+              IssueError(:final message) => Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('${l10n.error}: $message'),
+                    const SizedBox(height: 16),
+                    FilledButton(
+                      onPressed: () => Injection.issueNotifier.getIssue(
+                        widget.owner,
+                        widget.repo,
+                        widget.index,
+                      ),
+                      child: Text(l10n.retry),
                     ),
-                    child: Text(l10n.retry),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            IssueDetailLoaded(:final issue) => _IssueContent(
+              IssueDetailLoaded(:final issue) => _IssueContent(
               issue: issue,
               owner: widget.owner,
               repo: widget.repo,
@@ -278,7 +290,8 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
           };
         },
       ),
-    );
+    ),
+  );
   }
 }
 

@@ -114,6 +114,15 @@ class _PRDetailPageState extends State<PRDetailPage> {
     }
   }
 
+  Future<void> _onRefresh() async {
+    await Future.wait([
+      Injection.repoNotifier.getPullRequest(widget.owner, widget.repo, widget.index),
+      Injection.issueNotifier.listComments(widget.owner, widget.repo, widget.index),
+    ]);
+    await _loadReviews();
+    await _refreshPrReactions();
+  }
+
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
@@ -160,30 +169,32 @@ class _PRDetailPageState extends State<PRDetailPage> {
           ],
         ],
       ),
-      body: ListenableBuilder(
-        listenable: Listenable.merge([Injection.repoNotifier, Injection.issueNotifier]),
-        builder: (context, _) {
-          final state = Injection.repoNotifier.pullRequestDetailState;
-          return switch (state) {
-            PullRequestDetailLoading() => const Center(child: CircularProgressIndicator()),
-            PullRequestDetailError(:final message) => Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('${l10n.error}: $message'),
-                  const SizedBox(height: 16),
-                  FilledButton(
-                    onPressed: () => Injection.repoNotifier.getPullRequest(
-                      widget.owner,
-                      widget.repo,
-                      widget.index,
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: ListenableBuilder(
+          listenable: Listenable.merge([Injection.repoNotifier, Injection.issueNotifier]),
+          builder: (context, _) {
+            final state = Injection.repoNotifier.pullRequestDetailState;
+            return switch (state) {
+              PullRequestDetailLoading() => const Center(child: CircularProgressIndicator()),
+              PullRequestDetailError(:final message) => Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('${l10n.error}: $message'),
+                    const SizedBox(height: 16),
+                    FilledButton(
+                      onPressed: () => Injection.repoNotifier.getPullRequest(
+                        widget.owner,
+                        widget.repo,
+                        widget.index,
+                      ),
+                      child: Text(l10n.retry),
                     ),
-                    child: Text(l10n.retry),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            PullRequestDetailDataLoaded(:final pullRequest) => _PRContent(
+              PullRequestDetailDataLoaded(:final pullRequest) => _PRContent(
               pr: pullRequest,
               owner: widget.owner,
               repo: widget.repo,
@@ -198,7 +209,8 @@ class _PRDetailPageState extends State<PRDetailPage> {
           };
         },
       ),
-    );
+    ),
+  );
   }
 }
 

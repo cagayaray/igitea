@@ -509,14 +509,33 @@ class _ActivityFeed extends StatefulWidget {
 }
 
 class _ActivityFeedState extends State<_ActivityFeed> {
+  final _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.user.login != null) {
         Injection.userNotifier.getUserActivities(widget.user.login!);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (currentScroll >= maxScroll - 200) {
+      Injection.userNotifier.loadMoreActivities(widget.user.login!);
+    }
   }
 
   @override
@@ -602,6 +621,7 @@ class _ActivityFeedState extends State<_ActivityFeed> {
         ];
 
         return ListView(
+          controller: _scrollController,
           padding: const EdgeInsets.symmetric(vertical: 8),
           children: items,
         );

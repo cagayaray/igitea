@@ -231,98 +231,105 @@ class _FileBlamePageState extends State<FileBlamePage> {
               ),
             ),
           ),
-          child: InkWell(
-            onTap: sha.isNotEmpty
-                ? () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => CommitDetailPage(
-                        owner: widget.owner,
-                        repo: widget.repo,
-                        sha: sha,
-                      ),
-                    ),
-                  )
-                : null,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 80,
-                  child: commit != null
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: UIConstants.xs,
-                            vertical: UIConstants.xs,
-                          ),
-                          child: Row(
-                            children: [
-                              if (commit.author != null)
-                                UserAvatar(
-                                  user: commit.author!,
-                                  radius: UIConstants.avatarXs,
-                                ),
-                              const SizedBox(width: UIConstants.xs),
-                              Expanded(
-                                child: Text(
-                                  commit.sha?.substring(0, 7) ?? '',
-                                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                    fontFamily: 'monospace',
-                                    color: Theme.of(context).colorScheme.primary,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : null,
-                ),
-                Container(
-                  width: 1,
-                  color: Theme.of(context).colorScheme.outlineVariant,
-                ),
-                SizedBox(
-                  width: 40,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: UIConstants.xs,
-                      vertical: UIConstants.xs,
-                    ),
-                    child: Text(
-                      '$lineNum',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        fontFamily: 'monospace',
-                        color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-                      ),
-                      textAlign: TextAlign.right,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 1,
-                  color: Theme.of(context).colorScheme.outlineVariant,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: UIConstants.xs,
-                      vertical: UIConstants.xs,
-                    ),
-                    child: Text(
-                      _lines[index],
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontFamily: 'monospace',
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: _buildBlameRow(context, lineNum, sha, commit, index),
         );
       },
     );
+  }
+
+  Widget _buildBlameRow(BuildContext context, int lineNum, String sha, dynamic commit, int index) {
+    final row = Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 80,
+          child: commit != null
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: UIConstants.xs,
+                    vertical: UIConstants.xs,
+                  ),
+                  child: Row(
+                    children: [
+                      if (commit.author != null)
+                        UserAvatar(
+                          user: commit.author!,
+                          radius: UIConstants.avatarXs,
+                        ),
+                      const SizedBox(width: UIConstants.xs),
+                      Expanded(
+                        child: Text(
+                          commit.sha?.substring(0, 7) ?? '',
+                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            fontFamily: 'monospace',
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : null,
+        ),
+        Container(
+          width: 1,
+          color: Theme.of(context).colorScheme.outlineVariant,
+        ),
+        SizedBox(
+          width: 40,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: UIConstants.xs,
+              vertical: UIConstants.xs,
+            ),
+            child: Text(
+              '$lineNum',
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                fontFamily: 'monospace',
+                color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ),
+        Container(
+          width: 1,
+          color: Theme.of(context).colorScheme.outlineVariant,
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: UIConstants.xs,
+              vertical: UIConstants.xs,
+            ),
+            child: Text(
+              _lines[index],
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontFamily: 'monospace',
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+
+    if (sha.isNotEmpty) {
+      return InkWell(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => CommitDetailPage(
+              owner: widget.owner,
+              repo: widget.repo,
+              sha: sha,
+            ),
+          ),
+        ),
+        child: row,
+      );
+    }
+    return row;
   }
 
   Widget _buildSimpleView() {

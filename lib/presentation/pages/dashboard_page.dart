@@ -272,6 +272,14 @@ class _CollapsibleSectionState extends State<_CollapsibleSection>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.of(context).disableAnimations) {
+      _controller.value = _expanded ? 1.0 : 0.0;
+    }
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -279,10 +287,14 @@ class _CollapsibleSectionState extends State<_CollapsibleSection>
 
   void _toggle() {
     setState(() => _expanded = !_expanded);
-    if (_expanded) {
-      _controller.forward();
+    if (MediaQuery.of(context).disableAnimations) {
+      _controller.value = _expanded ? 1.0 : 0.0;
     } else {
-      _controller.reverse();
+      if (_expanded) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
     }
   }
 
@@ -458,7 +470,7 @@ class _ActionTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                Icon(Icons.chevron_right, color: theme.colorScheme.onSurfaceVariant),
+                Semantics(excludeSemantics: true, child: Icon(Icons.chevron_right, color: theme.colorScheme.onSurfaceVariant)),
               ],
             ),
           ),

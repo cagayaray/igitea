@@ -46,15 +46,18 @@ class _PremiumCardState extends State<PremiumCard> {
           ),
         ),
         clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: widget.onTap,
-          onTapDown: (_) => setState(() => _isPressed = true),
-          onTapUp: (_) => setState(() => _isPressed = false),
-          onTapCancel: () => setState(() => _isPressed = false),
-          borderRadius: BorderRadius.circular(UIConstants.cardRadius),
-          child: Padding(
-            padding: widget.padding ?? UIConstants.cardPadding,
-            child: widget.child,
+        child: Semantics(
+          button: widget.onTap != null,
+          child: InkWell(
+            onTap: widget.onTap,
+            onTapDown: (_) { if (mounted) setState(() => _isPressed = true); },
+            onTapUp: (_) { if (mounted) setState(() => _isPressed = false); },
+            onTapCancel: () { if (mounted) setState(() => _isPressed = false); },
+            borderRadius: BorderRadius.circular(UIConstants.cardRadius),
+            child: Padding(
+              padding: widget.padding ?? UIConstants.cardPadding,
+              child: widget.child,
+            ),
           ),
         ),
       ),

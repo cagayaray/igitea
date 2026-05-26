@@ -359,15 +359,17 @@ class _ColorPickerDialogState extends State<_ColorPickerDialog> {
           final color = Color(int.parse('FF${hex.replaceFirst('#', '')}', radix: 16));
           return GestureDetector(
             onTap: () => Navigator.of(context).pop(color),
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-                border: _selected.toARGB32() == color.toARGB32()
-                    ? Border.all(color: Colors.white, width: 3)
-                    : null,
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Container(
+                width: 40, height: 40,
+                decoration: BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                  border: _selected.toARGB32() == color.toARGB32()
+                      ? Border.all(color: Colors.white, width: 3)
+                      : null,
+                ),
               ),
             ),
           );

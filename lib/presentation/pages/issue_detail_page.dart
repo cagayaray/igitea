@@ -312,13 +312,13 @@ class _IssueContent extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: isOpen ? Colors.green.withValues(alpha: 0.2) : Colors.purple.withValues(alpha: 0.2),
+                  color: isOpen ? theme.colorScheme.primary.withValues(alpha: 0.12) : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   isOpen ? l10n.open : l10n.closed,
                   style: theme.textTheme.labelSmall?.copyWith(
-                    color: isOpen ? Colors.green : Colors.purple,
+                    color: isOpen ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -412,6 +412,7 @@ class _IssueContent extends StatelessWidget {
               context,
               icon: Icons.person_outline,
               label: l10n.assignee,
+              semanticsLabel: '${l10n.assignee}: ${issue.assignee!.login ?? ''}',
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -433,9 +434,15 @@ class _IssueContent extends StatelessWidget {
                   Text(issue.milestone!.title ?? ''),
                   if (canEdit) ...[
                     const SizedBox(width: 8),
-                    InkWell(
-                      onTap: () => _showMilestoneEditor(context, issue),
-                      child: Icon(Icons.edit, size: 16, color: theme.colorScheme.primary),
+                    Tooltip(
+                      message: l10n.editMilestone,
+                      child: InkWell(
+                        onTap: () => _showMilestoneEditor(context, issue),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Icon(Icons.edit, size: 16, color: theme.colorScheme.primary),
+                        ),
+                      ),
                     ),
                   ],
                 ],
@@ -467,14 +474,26 @@ class _IssueContent extends StatelessWidget {
                       ],
                       if (canEdit) ...[
                         const SizedBox(width: 8),
-                        InkWell(
-                          onTap: () => _editDueDate(context, issue),
-                          child: Icon(Icons.edit, size: 16, color: theme.colorScheme.primary),
+                        Tooltip(
+                          message: l10n.editDueDate,
+                          child: InkWell(
+                            onTap: () => _editDueDate(context, issue),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Icon(Icons.edit, size: 16, color: theme.colorScheme.primary),
+                            ),
+                          ),
                         ),
                         const SizedBox(width: 4),
-                        InkWell(
-                          onTap: () => _clearDueDate(),
-                          child: Icon(Icons.clear, size: 16, color: theme.colorScheme.error),
+                        Tooltip(
+                          message: l10n.clearDueDate,
+                          child: InkWell(
+                            onTap: () => _clearDueDate(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Icon(Icons.clear, size: 16, color: theme.colorScheme.error),
+                            ),
+                          ),
                         ),
                       ],
                     ],
@@ -590,6 +609,7 @@ class _IssueContent extends StatelessWidget {
                 },
               ),
             ),
+            textCapitalization: TextCapitalization.sentences,
             maxLines: 3,
             minLines: 1,
           ),
@@ -844,9 +864,10 @@ class _IssueContent extends StatelessWidget {
     required IconData icon,
     required String label,
     required Widget child,
+    String? semanticsLabel,
   }) {
     final theme = Theme.of(context);
-    return Padding(
+    final row = Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
@@ -862,6 +883,10 @@ class _IssueContent extends StatelessWidget {
         ],
       ),
     );
+    if (semanticsLabel != null) {
+      return Semantics(label: semanticsLabel, child: row);
+    }
+    return row;
   }
 
   String _formatDate(DateTime? date, AppLocalizations l10n) {
@@ -1209,6 +1234,7 @@ class _CommentItemState extends State<_CommentItem> {
                                   border: OutlineInputBorder(),
                                   isDense: true,
                                 ),
+                                textInputAction: TextInputAction.done,
                                 maxLines: 5,
                                 minLines: 2,
                               ),

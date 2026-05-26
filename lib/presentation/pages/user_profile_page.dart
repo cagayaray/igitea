@@ -704,7 +704,7 @@ class _OrgsSection extends StatelessWidget {
       children: [
         Padding(
           padding: UIConstants.pagePadding,
-          child: GestureDetector(
+          child: InkWell(
             onTap: () {
               Navigator.push(
                 context,
@@ -713,6 +713,7 @@ class _OrgsSection extends StatelessWidget {
                 ),
               );
             },
+            borderRadius: BorderRadius.circular(4),
             child: Row(
               children: [
                 Text(

@@ -336,7 +336,7 @@ class _UserHeader extends StatelessWidget {
               const SizedBox(height: UIConstants.sm),
               Chip(
                 label: Text(l10n.admin),
-                avatar: Icon(Icons.shield, size: UIConstants.iconSm, color: theme.colorScheme.onError),
+                avatar: Semantics(excludeSemantics: true, child: Icon(Icons.shield, size: UIConstants.iconSm, color: theme.colorScheme.onError)),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 visualDensity: VisualDensity.compact,
               ),
@@ -500,7 +500,7 @@ class _OrgsSection extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
+              InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
@@ -509,6 +509,7 @@ class _OrgsSection extends StatelessWidget {
                     ),
                   );
                 },
+                borderRadius: BorderRadius.circular(4),
                 child: Row(
                   children: [
                     Text(
@@ -516,10 +517,13 @@ class _OrgsSection extends StatelessWidget {
                       style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(width: UIConstants.xs),
-                    Icon(
-                      Icons.chevron_right,
-                      size: 18,
-                      color: theme.colorScheme.onSurfaceVariant,
+                    Semantics(
+                      excludeSemantics: true,
+                      child: Icon(
+                        Icons.chevron_right,
+                        size: 18,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),

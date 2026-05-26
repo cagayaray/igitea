@@ -449,6 +449,7 @@ class _PRContent extends StatelessWidget {
                 },
               ),
             ),
+            textCapitalization: TextCapitalization.sentences,
             maxLines: 3,
             minLines: 1,
           ),

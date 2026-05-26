@@ -120,8 +120,12 @@ class OrgActionsNotifier extends ChangeNotifier {
         body: {'data': secretValue},
       ),
     );
-    if (result.isRight) {
-      await loadSecrets(org);
+    switch (result) {
+      case Left<Failure, void>(:final value):
+        _secretsState = OrgActionsSecretsError(value.message);
+        notifyListeners();
+      case Right<Failure, void>():
+        await loadSecrets(org);
     }
   }
 
@@ -129,8 +133,12 @@ class OrgActionsNotifier extends ChangeNotifier {
     final result = await _deleteSecretUseCase.call(
       DeleteOrgActionsSecretParams(org: org, secretName: secretName),
     );
-    if (result.isRight) {
-      await loadSecrets(org);
+    switch (result) {
+      case Left<Failure, void>(:final value):
+        _secretsState = OrgActionsSecretsError(value.message);
+        notifyListeners();
+      case Right<Failure, void>():
+        await loadSecrets(org);
     }
   }
 
@@ -156,8 +164,12 @@ class OrgActionsNotifier extends ChangeNotifier {
         body: {'data': variableValue},
       ),
     );
-    if (result.isRight) {
-      await loadVariables(org);
+    switch (result) {
+      case Left<Failure, void>(:final value):
+        _variablesState = OrgActionsVariablesError(value.message);
+        notifyListeners();
+      case Right<Failure, void>():
+        await loadVariables(org);
     }
   }
 
@@ -165,8 +177,12 @@ class OrgActionsNotifier extends ChangeNotifier {
     final result = await _deleteVariableUseCase.call(
       DeleteOrgActionsVariableParams(org: org, variableName: variableName),
     );
-    if (result.isRight) {
-      await loadVariables(org);
+    switch (result) {
+      case Left<Failure, void>(:final value):
+        _variablesState = OrgActionsVariablesError(value.message);
+        notifyListeners();
+      case Right<Failure, void>():
+        await loadVariables(org);
     }
   }
 }

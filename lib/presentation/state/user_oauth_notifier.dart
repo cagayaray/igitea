@@ -72,15 +72,23 @@ class UserOAuthNotifier extends ChangeNotifier {
 
   Future<void> createApp(Map<String, dynamic> body) async {
     final result = await _createOAuth2AppUseCase.call(body);
-    if (result.isRight) {
-      await loadApps();
+    switch (result) {
+      case Left<Failure, OAuth2Application>(:final value):
+        _appsState = OAuth2AppsError(value.message);
+        notifyListeners();
+      case Right<Failure, OAuth2Application>():
+        await loadApps();
     }
   }
 
   Future<void> deleteApp(int id) async {
     final result = await _deleteOAuth2AppUseCase.call(id);
-    if (result.isRight) {
-      await loadApps();
+    switch (result) {
+      case Left<Failure, void>(:final value):
+        _appsState = OAuth2AppsError(value.message);
+        notifyListeners();
+      case Right<Failure, void>():
+        await loadApps();
     }
   }
 }

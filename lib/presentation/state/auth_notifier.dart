@@ -50,16 +50,16 @@ class AuthNotifier extends ChangeNotifier {
         _state = AuthError(value.message);
         notifyListeners();
       case Right<Failure, User>(:final value):
+        await _storage.saveCredentials(
+          baseUrl: baseUrl,
+          method: AuthMethod.token,
+          token: token,
+        );
         _state = AuthAuthenticated(
           baseUrl: baseUrl,
           method: AuthMethod.token,
           token: token,
           user: value,
-        );
-        await _storage.saveCredentials(
-          baseUrl: baseUrl,
-          method: AuthMethod.token,
-          token: token,
         );
         notifyListeners();
     }
@@ -79,18 +79,18 @@ class AuthNotifier extends ChangeNotifier {
         _state = AuthError(value.message);
         notifyListeners();
       case Right<Failure, User>(:final value):
+        await _storage.saveCredentials(
+          baseUrl: baseUrl,
+          method: AuthMethod.basic,
+          username: username,
+          password: password,
+        );
         _state = AuthAuthenticated(
           baseUrl: baseUrl,
           method: AuthMethod.basic,
           username: username,
           password: password,
           user: value,
-        );
-        await _storage.saveCredentials(
-          baseUrl: baseUrl,
-          method: AuthMethod.basic,
-          username: username,
-          password: password,
         );
         notifyListeners();
     }
@@ -110,18 +110,18 @@ class AuthNotifier extends ChangeNotifier {
         _state = AuthError(value.message);
         notifyListeners();
       case Right<Failure, User>(:final value):
+        await _storage.saveCredentials(
+          baseUrl: baseUrl,
+          method: AuthMethod.oauth2,
+          token: token,
+          refreshToken: refreshToken,
+        );
         _state = AuthAuthenticated(
           baseUrl: baseUrl,
           method: AuthMethod.oauth2,
           token: token,
           refreshToken: refreshToken,
           user: value,
-        );
-        await _storage.saveCredentials(
-          baseUrl: baseUrl,
-          method: AuthMethod.oauth2,
-          token: token,
-          refreshToken: refreshToken,
         );
         notifyListeners();
     }

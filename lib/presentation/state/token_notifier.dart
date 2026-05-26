@@ -92,11 +92,15 @@ class TokenNotifier extends ChangeNotifier {
       username: username,
       tokenId: tokenId,
     );
-    final success = result is Right<Failure, void>;
-    if (success) {
-      _state = const TokenDeleted();
-      notifyListeners();
+    switch (result) {
+      case Left<Failure, void>(:final value):
+        _state = TokenError(value.message);
+        notifyListeners();
+        return false;
+      case Right<Failure, void>():
+        _state = const TokenDeleted();
+        notifyListeners();
+        return true;
     }
-    return success;
   }
 }

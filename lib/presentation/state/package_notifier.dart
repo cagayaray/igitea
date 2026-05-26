@@ -119,6 +119,8 @@ class PackageNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  int _packageLoadToken = 0;
+
   Future<void> loadPackageDetail({
     required String owner,
     required String type,
@@ -139,10 +141,37 @@ class PackageNotifier extends ChangeNotifier {
       case Right<Failure, Package>(:final value):
         _detailState = PackageDetailLoaded(value, []);
         notifyListeners();
-        _loadPackageFiles(owner, type, name, version);
+        final token = ++_packageLoadToken;
+        _loadPackageFiles(owner, type, name, version, token);
       case Left<Failure, Package>(:final value):
         _detailState = PackageDetailError(value.message);
         notifyListeners();
+    }
+  }
+
+  Future<void> _loadPackageFiles(
+    String owner,
+    String type,
+    String name,
+    String version,
+    int token,
+  ) async {
+    final result = await _listPackageFilesUseCase(ListPackageFilesParams(
+      owner: owner,
+      type: type,
+      name: name,
+      version: version,
+    ));
+
+    switch (result) {
+      case Right<Failure, List<PackageFile>>(:final value):
+        if (token == _packageLoadToken && _detailState is PackageDetailLoaded) {
+          final current = _detailState as PackageDetailLoaded;
+          _detailState = PackageDetailLoaded(current.package, value);
+          notifyListeners();
+        }
+      case Left():
+        break;
     }
   }
 
@@ -208,31 +237,6 @@ class PackageNotifier extends ChangeNotifier {
     }
     _versionsLoading = false;
     notifyListeners();
-  }
-
-  Future<void> _loadPackageFiles(
-    String owner,
-    String type,
-    String name,
-    String version,
-  ) async {
-    final result = await _listPackageFilesUseCase(ListPackageFilesParams(
-      owner: owner,
-      type: type,
-      name: name,
-      version: version,
-    ));
-
-    switch (result) {
-      case Right<Failure, List<PackageFile>>(:final value):
-        if (_detailState is PackageDetailLoaded) {
-          final current = _detailState as PackageDetailLoaded;
-          _detailState = PackageDetailLoaded(current.package, value);
-          notifyListeners();
-        }
-      case Left():
-        break;
-    }
   }
 
   Future<bool> deletePackageVersion({

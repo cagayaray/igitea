@@ -511,25 +511,37 @@ class AdminNotifier extends ChangeNotifier {
 
   Future<Hook?> getHookDetail(int id) async {
     final result = await _getAdminHookUseCase.call(id);
-    return switch (result) {
-      Left<Failure, Hook>() => null,
-      Right<Failure, Hook>(:final value) => value,
-    };
+    switch (result) {
+      case Left<Failure, Hook>(:final value):
+        _operationState = AdminOperationError(value.message);
+        notifyListeners();
+        return null;
+      case Right<Failure, Hook>(:final value):
+        return value;
+    }
   }
 
   Future<ActionRunner?> getRunnerDetail(int runnerId) async {
     final result = await _getAdminRunnerUseCase.call(runnerId);
-    return switch (result) {
-      Left<Failure, ActionRunner>() => null,
-      Right<Failure, ActionRunner>(:final value) => value,
-    };
+    switch (result) {
+      case Left<Failure, ActionRunner>(:final value):
+        _operationState = AdminOperationError(value.message);
+        notifyListeners();
+        return null;
+      case Right<Failure, ActionRunner>(:final value):
+        return value;
+    }
   }
 
   Future<String?> getRunnerRegistrationToken() async {
     final result = await _getAdminRunnerRegistrationTokenUseCase.call();
-    return switch (result) {
-      Left<Failure, String>() => null,
-      Right<Failure, String>(:final value) => value,
-    };
+    switch (result) {
+      case Left<Failure, String>(:final value):
+        _operationState = AdminOperationError(value.message);
+        notifyListeners();
+        return null;
+      case Right<Failure, String>(:final value):
+        return value;
+    }
   }
 }

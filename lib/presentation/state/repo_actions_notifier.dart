@@ -123,8 +123,12 @@ class RepoActionsNotifier extends ChangeNotifier {
         body: {'data': secretValue},
       ),
     );
-    if (result.isRight) {
-      await loadSecrets(owner, repo);
+    switch (result) {
+      case Left<Failure, void>(:final value):
+        _secretsState = RepoActionsSecretsError(value.message);
+        notifyListeners();
+      case Right<Failure, void>():
+        await loadSecrets(owner, repo);
     }
   }
 
@@ -132,8 +136,12 @@ class RepoActionsNotifier extends ChangeNotifier {
     final result = await _deleteSecretUseCase.call(
       DeleteRepoActionsSecretParams(owner: owner, repo: repo, secretName: secretName),
     );
-    if (result.isRight) {
-      await loadSecrets(owner, repo);
+    switch (result) {
+      case Left<Failure, void>(:final value):
+        _secretsState = RepoActionsSecretsError(value.message);
+        notifyListeners();
+      case Right<Failure, void>():
+        await loadSecrets(owner, repo);
     }
   }
 
@@ -162,8 +170,12 @@ class RepoActionsNotifier extends ChangeNotifier {
         body: {'data': variableValue},
       ),
     );
-    if (result.isRight) {
-      await loadVariables(owner, repo);
+    switch (result) {
+      case Left<Failure, void>(:final value):
+        _variablesState = RepoActionsVariablesError(value.message);
+        notifyListeners();
+      case Right<Failure, void>():
+        await loadVariables(owner, repo);
     }
   }
 
@@ -171,8 +183,12 @@ class RepoActionsNotifier extends ChangeNotifier {
     final result = await _deleteVariableUseCase.call(
       DeleteRepoActionsVariableParams(owner: owner, repo: repo, variableName: variableName),
     );
-    if (result.isRight) {
-      await loadVariables(owner, repo);
+    switch (result) {
+      case Left<Failure, void>(:final value):
+        _variablesState = RepoActionsVariablesError(value.message);
+        notifyListeners();
+      case Right<Failure, void>():
+        await loadVariables(owner, repo);
     }
   }
 }

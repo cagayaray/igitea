@@ -23,6 +23,10 @@ class RepoLoaded extends RepoState {
   const RepoLoaded(this.repo);
 }
 
+class RepoDeleted extends RepoState {
+  const RepoDeleted();
+}
+
 class RepoListLoaded extends RepoState {
   final List<Repository> repos;
   const RepoListLoaded(this.repos);
@@ -978,7 +982,7 @@ class RepoNotifier extends ChangeNotifier {
         _state = RepoError(value.message);
         notifyListeners();
       case Right<Failure, void>():
-        _state = const RepoInitial();
+        _state = const RepoDeleted();
         notifyListeners();
     }
   }

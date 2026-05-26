@@ -33,6 +33,21 @@
 - **登录logo语义** [P1]：logo包裹`Semantics(label: l10n.appTitle)`
 - **操作图标提示** [P1]：topic编辑图标添加`Tooltip`
 - **反应按钮无障碍** [P1]：反应按钮添加`Semantics(label: 'Add reaction')`
+- **PremiumCard setState安全** [P1]：tap回调添加`if (mounted)`守卫
+- **TokensPage无效InkWell** [P1]：移除`onTap: null`包装器
+- **编辑图标点击区域** [P1]：增大到48dp并添加Tooltip/Semantics标签
+- **Notifier错误处理** [P2]：PackageNotifier竞态条件、OrgActions/RepoActions/UserOAuth/Token/Admin notifier错误状态
+- **认证持久化顺序** [P2]：状态变更前先保存凭证
+- **仓库删除状态** [P2]：新增`RepoDeleted`状态替代复用`RepoInitial`
+- **输入验证** [P2]：OAuth2验证器、焦点链、自动填充、maxLength限制、TextFormField迁移
+- **键盘类型** [P2]：website字段URL键盘、评论textCapitalization
+- **图片约束** [P2]：repo文件查看器限制图片尺寸
+- **ListView性能** [P2]：添加`itemExtent`和`AutomaticKeepAliveClientMixin`
+- **手势反馈** [P2]：GestureDetector改InkWell、条件InkWell包装、按压反馈
+- **颜色主题** [P2]：badge颜色、diff统计、语言点使用主题色
+- **减少动画** [P2]：dashboard/empty state尊重`MediaQuery.disableAnimations`
+- **语义层级** [P2]：标题层级、信息行合并、装饰元素排除
+- **硬编码字符串** [P2]：`loadMore`、筛选对话框字符串替换为l10n键
 
 ### Added
 - **Issue List 高级筛选**：标签、里程碑、类型、指派给我、我创建的、提及我的

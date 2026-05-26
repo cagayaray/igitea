@@ -50,6 +50,21 @@
 - **Login logo semantics** [P1]: Wrapped logo in `Semantics(label: l10n.appTitle)`
 - **Action icon tooltips** [P1]: Added `Tooltip` to topic edit icon
 - **Reaction picker accessibility** [P1]: Added `Semantics(label: 'Add reaction')` to reaction buttons
+- **PremiumCard setState safety** [P1]: Added `if (mounted)` guards to tap callbacks
+- **TokensPage dead InkWell** [P1]: Removed `onTap: null` wrapper
+- **Edit icon tap targets** [P1]: Increased to 48dp with Tooltip/Semantics labels in issue/PR detail
+- **Notifier error handling** [P2]: PackageNotifier race condition, OrgActions/RepoActions/UserOAuth/Token/Admin notifier error states
+- **Auth persistence order** [P2]: Save credentials BEFORE mutating auth state
+- **Repo deletion state** [P2]: Added `RepoDeleted` state instead of reusing `RepoInitial`
+- **Input validation** [P2]: OAuth2 validators, focus traversal, autofill hints, maxLength constraints, TextFormField migration
+- **Keyboard types** [P2]: URL keyboard for website fields, textCapitalization for comments
+- **Image constraints** [P2]: Constrained image dimensions in repo file viewer
+- **ListView performance** [P2]: Added `itemExtent` and `AutomaticKeepAliveClientMixin`
+- **Gesture feedback** [P2]: InkWell instead of GestureDetector, conditional InkWell wrapper, press-down feedback
+- **Color theming** [P2]: Theme-aware badge colors, diff stats, language dots
+- **Reduced motion** [P2]: Respect `MediaQuery.disableAnimations` in dashboard/empty state
+- **Semantic hierarchy** [P2]: Heading levels, info row merging, decorative elements excluded
+- **Hardcoded strings** [P2]: `loadMore`, filter dialog strings replaced with l10n keys
 
 ### Added
 - **Issue List advanced filters**: labels, milestones, type, assignee, created by me, mentioned me

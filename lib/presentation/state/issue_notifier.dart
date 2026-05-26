@@ -455,7 +455,21 @@ _listMilestonesUseCase = listMilestonesUseCase;
       case Left<Failure, Comment>():
         break;
       case Right<Failure, Comment>():
-        await listComments(owner, repo, index);
+        await _refreshCommentsSilently(owner, repo, index);
+    }
+  }
+
+  Future<void> _refreshCommentsSilently(String owner, String repo, int index) async {
+    final result = await _listCommentsUseCase.call(
+      ListCommentsParams(owner: owner, repo: repo, index: index, page: 1, limit: _commentLimit),
+    );
+    switch (result) {
+      case Left<Failure, List<Comment>>():
+        break;
+      case Right<Failure, List<Comment>>(:final value):
+        _commentsState = CommentsLoaded(value, hasMore: value.length >= _commentLimit);
+        _commentPage = 1;
+        notifyListeners();
     }
   }
 

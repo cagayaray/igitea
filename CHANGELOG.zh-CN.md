@@ -48,6 +48,8 @@
 - **减少动画** [P2]：dashboard/empty state尊重`MediaQuery.disableAnimations`
 - **语义层级** [P2]：标题层级、信息行合并、装饰元素排除
 - **硬编码字符串** [P2]：`loadMore`、筛选对话框字符串替换为l10n键
+- **评论静默刷新** [P2]：提交评论不再显示全屏loading，列表无缝更新
+- **评论无限滚动** [P2]：滚动到底部200px内自动加载更多评论（Issue/PR详情页）
 
 ### Added
 - **Issue List 高级筛选**：标签、里程碑、类型、指派给我、我创建的、提及我的

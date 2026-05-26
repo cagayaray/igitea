@@ -65,6 +65,8 @@
 - **Reduced motion** [P2]: Respect `MediaQuery.disableAnimations` in dashboard/empty state
 - **Semantic hierarchy** [P2]: Heading levels, info row merging, decorative elements excluded
 - **Hardcoded strings** [P2]: `loadMore`, filter dialog strings replaced with l10n keys
+- **Comment silent refresh** [P2]: Submitting a comment no longer shows a full loading ring; list updates seamlessly
+- **Comment infinite scroll** [P2]: Auto-load more comments when scrolling within 200px of bottom (Issue/PR detail)
 
 ### Added
 - **Issue List advanced filters**: labels, milestones, type, assignee, created by me, mentioned me

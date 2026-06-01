@@ -324,7 +324,7 @@ class _LoginPageState extends State<LoginPage>
             enabled: !isLoading,
             autofillHints: const [AutofillHints.url],
           ),
-          const SizedBox(height: UIConstants.md),
+          const SizedBox(height: UIConstants.lg),
           TextFormField(
             controller: _usernameController,
             decoration: InputDecoration(
@@ -343,7 +343,7 @@ class _LoginPageState extends State<LoginPage>
             enabled: !isLoading,
             autofillHints: const [AutofillHints.username],
           ),
-          const SizedBox(height: UIConstants.md),
+          const SizedBox(height: UIConstants.lg),
           TextFormField(
             controller: _passwordController,
             decoration: InputDecoration(
@@ -411,7 +411,7 @@ class _LoginPageState extends State<LoginPage>
             validator: (value) => _validateUrl(value, l10n),
             enabled: !isLoading,
           ),
-          const SizedBox(height: UIConstants.md),
+          const SizedBox(height: UIConstants.lg),
           TextFormField(
             controller: _tokenController,
             decoration: InputDecoration(
@@ -470,7 +470,7 @@ class _LoginPageState extends State<LoginPage>
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: UIConstants.md),
+          const SizedBox(height: UIConstants.lg),
           TextFormField(
             controller: _baseUrlController,
             decoration: InputDecoration(
@@ -484,7 +484,7 @@ class _LoginPageState extends State<LoginPage>
             validator: (value) => _validateUrl(value, l10n),
             enabled: !isLoading,
           ),
-          const SizedBox(height: UIConstants.sm),
+          const SizedBox(height: UIConstants.md),
           TextFormField(
             controller: _oauthClientIdController,
             decoration: InputDecoration(
@@ -500,7 +500,7 @@ class _LoginPageState extends State<LoginPage>
             },
             enabled: !isLoading,
           ),
-          const SizedBox(height: UIConstants.sm),
+          const SizedBox(height: UIConstants.md),
           TextFormField(
             controller: _oauthClientSecretController,
             decoration: InputDecoration(
@@ -543,7 +543,7 @@ class _LoginPageState extends State<LoginPage>
               label: Text(l10n.oauth2Authorize),
             ),
           ),
-          const SizedBox(height: UIConstants.md),
+          const SizedBox(height: UIConstants.lg),
           TextFormField(
             controller: _oauthCodeController,
             decoration: InputDecoration(
@@ -560,7 +560,7 @@ class _LoginPageState extends State<LoginPage>
             },
             enabled: !isLoading && !_oauthCodeExchanging,
           ),
-          const SizedBox(height: UIConstants.md),
+          const SizedBox(height: UIConstants.lg),
           SizedBox(
             width: double.infinity,
             child: FilledButton(

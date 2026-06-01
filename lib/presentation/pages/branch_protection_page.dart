@@ -53,7 +53,8 @@ class _BranchProtectionPageState extends State<BranchProtectionPage> {
           controller: nameController,
           decoration: InputDecoration(
             labelText: l10n.releaseTagName,
-            hintText: 'main',
+            helperText: 'main',
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
             border: const OutlineInputBorder(),
           ),
         ),

@@ -142,7 +142,8 @@ class _CreateWebhookPageState extends State<CreateWebhookPage> {
               controller: _urlController,
               decoration: InputDecoration(
                 labelText: l10n.webhookUrl,
-                hintText: l10n.webhookUrlHint,
+                helperText: l10n.webhookUrlHint,
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
                 border: const OutlineInputBorder(),
               ),
               keyboardType: TextInputType.url,
@@ -152,7 +153,8 @@ class _CreateWebhookPageState extends State<CreateWebhookPage> {
               controller: _secretController,
               decoration: InputDecoration(
                 labelText: l10n.webhookSecret,
-                hintText: l10n.webhookSecretHint,
+                helperText: l10n.webhookSecretHint,
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
                 border: const OutlineInputBorder(),
               ),
               obscureText: true,

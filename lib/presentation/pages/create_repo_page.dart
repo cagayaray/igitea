@@ -128,7 +128,8 @@ class _CreateRepoPageState extends State<CreateRepoPage> {
               controller: _nameController,
               decoration: InputDecoration(
                 labelText: l10n.repositoryName,
-                hintText: l10n.repositoryNameHint,
+                helperText: l10n.repositoryNameHint,
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.source),
               ),
@@ -146,7 +147,8 @@ class _CreateRepoPageState extends State<CreateRepoPage> {
               controller: _descriptionController,
               decoration: InputDecoration(
                 labelText: l10n.description,
-                hintText: l10n.descriptionHint,
+                helperText: l10n.descriptionHint,
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.description_outlined),
               ),

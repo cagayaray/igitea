@@ -234,7 +234,8 @@ class _SshKeysPageState extends State<SshKeysPage> {
                 controller: titleController,
                 decoration: InputDecoration(
                   labelText: l10n.title,
-                  hintText: l10n.myLaptopHint,
+                  helperText: l10n.myLaptopHint,
+                  floatingLabelBehavior: FloatingLabelBehavior.auto,
                 ),
                 maxLength: 255,
                 validator: (value) {
@@ -249,7 +250,8 @@ class _SshKeysPageState extends State<SshKeysPage> {
                 controller: keyController,
                 decoration: InputDecoration(
                   labelText: l10n.publicKey,
-                  hintText: l10n.sshPublicKeyHint,
+                  helperText: l10n.sshPublicKeyHint,
+                  floatingLabelBehavior: FloatingLabelBehavior.auto,
                 ),
                 maxLines: 5,
               ),

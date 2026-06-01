@@ -53,8 +53,10 @@ class _ReviewRequestDialogState extends State<ReviewRequestDialog> {
                 child: TextField(
                   controller: _controller,
                   decoration: InputDecoration(
-                    hintText: l10n.addReviewerHint,
+                    labelText: l10n.username,
+                    helperText: l10n.addReviewerHint,
                     border: const OutlineInputBorder(),
+                    floatingLabelBehavior: FloatingLabelBehavior.auto,
                     isDense: true,
                   ),
                   textInputAction: TextInputAction.done,

@@ -2911,8 +2911,10 @@ class _TopicEditDialogState extends State<_TopicEditDialog> {
                   child: TextField(
                     controller: widget.controller,
                     decoration: InputDecoration(
-                      hintText: widget.l10n.addTopic,
+                      labelText: widget.l10n.addTopic,
+                      helperText: widget.l10n.addTopic,
                       border: const OutlineInputBorder(),
+                      floatingLabelBehavior: FloatingLabelBehavior.auto,
                       isDense: true,
                       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                     ),

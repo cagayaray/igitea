@@ -98,8 +98,9 @@ class _FileComparePageState extends State<FileComparePage> {
               controller: _baseRefController,
               decoration: InputDecoration(
                 labelText: l10n.baseRef,
-                hintText: 'main~1, abc1234',
+                helperText: 'main~1, abc1234',
                 border: const OutlineInputBorder(),
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
               ),
             ),
             const SizedBox(height: UIConstants.sm),
@@ -107,8 +108,9 @@ class _FileComparePageState extends State<FileComparePage> {
               controller: _headRefController,
               decoration: InputDecoration(
                 labelText: l10n.headRef,
-                hintText: 'main, HEAD',
+                helperText: 'main, HEAD',
                 border: const OutlineInputBorder(),
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
               ),
             ),
             const SizedBox(height: UIConstants.md),

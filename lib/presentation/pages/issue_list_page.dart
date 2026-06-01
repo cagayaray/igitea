@@ -152,7 +152,11 @@ class _IssueListPageState extends State<IssueListPage> {
         title: Text(l10n.saveFilter),
         content: TextField(
           controller: controller,
-          decoration: InputDecoration(hintText: l10n.filterName),
+          decoration: InputDecoration(
+            labelText: l10n.name,
+            helperText: l10n.filterName,
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+          ),
           autofocus: true,
         ),
         actions: [

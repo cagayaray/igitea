@@ -400,8 +400,7 @@ class _RepoFilePageState extends State<RepoFilePage> {
           controller: controller,
           decoration: InputDecoration(
             labelText: l10n.message,
-            helperText: l10n.commitMessageHint,
-            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            hintText: l10n.commitMessageHint,
           ),
           autofocus: true,
           maxLines: 3,

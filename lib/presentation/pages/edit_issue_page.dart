@@ -359,10 +359,8 @@ class _EditIssuePageState extends State<EditIssuePage> {
           TextField(
             controller: _bodyController,
             decoration: InputDecoration(
-              labelText: l10n.comment,
-              helperText: l10n.addComment,
+              hintText: l10n.addComment,
               border: const OutlineInputBorder(),
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
             ),
             maxLines: 10,
             minLines: 5,

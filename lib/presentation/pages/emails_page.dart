@@ -48,10 +48,8 @@ class _EmailsPageState extends State<EmailsPage> {
         content: TextField(
           controller: ctrl,
           decoration: InputDecoration(
-            labelText: l10n.email,
-            helperText: 'user@example.com',
+            hintText: 'user@example.com',
             border: const OutlineInputBorder(),
-            floatingLabelBehavior: FloatingLabelBehavior.auto,
           ),
           keyboardType: TextInputType.emailAddress,
         ),

@@ -131,8 +131,7 @@ class _CreateMilestonePageState extends State<CreateMilestonePage> {
               controller: _descriptionController,
               decoration: InputDecoration(
                 labelText: l10n.milestoneDescription,
-                helperText: l10n.milestoneDescriptionHint,
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                hintText: l10n.milestoneDescriptionHint,
                 border: const OutlineInputBorder(),
                 alignLabelWithHint: true,
               ),

@@ -52,8 +52,7 @@ class _TagProtectionsPageState extends State<TagProtectionsPage> {
           controller: nameController,
           decoration: InputDecoration(
             labelText: l10n.namePattern,
-            helperText: 'v*',
-            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            hintText: 'v*',
             border: const OutlineInputBorder(),
           ),
         ),

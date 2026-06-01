@@ -148,8 +148,7 @@ class _WikiEditPageState extends State<WikiEditPage> {
             controller: _titleController,
             decoration: InputDecoration(
               labelText: l10n.wikiPageTitle,
-              helperText: l10n.wikiPageTitleHint,
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
+              hintText: l10n.wikiPageTitleHint,
               border: const OutlineInputBorder(),
             ),
             maxLength: 100,
@@ -160,8 +159,7 @@ class _WikiEditPageState extends State<WikiEditPage> {
             controller: _contentController,
             decoration: InputDecoration(
               labelText: l10n.wikiPageContent,
-              helperText: l10n.wikiPageContentHint,
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
+              hintText: l10n.wikiPageContentHint,
               border: const OutlineInputBorder(),
               alignLabelWithHint: true,
             ),
@@ -174,8 +172,7 @@ class _WikiEditPageState extends State<WikiEditPage> {
             controller: _messageController,
             decoration: InputDecoration(
               labelText: l10n.commitMessage,
-              helperText: l10n.commitMessageHint,
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
+              hintText: l10n.commitMessageHint,
               border: const OutlineInputBorder(),
             ),
           ),

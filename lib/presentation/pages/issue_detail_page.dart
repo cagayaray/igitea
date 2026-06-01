@@ -621,10 +621,8 @@ class _IssueContent extends StatelessWidget {
           TextField(
             controller: commentController,
             decoration: InputDecoration(
-              labelText: l10n.comment,
-              helperText: l10n.writeComment,
+              hintText: l10n.writeComment,
               border: const OutlineInputBorder(),
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
               suffixIcon: IconButton(
                 icon: const Icon(Icons.send),
                 onPressed: () {

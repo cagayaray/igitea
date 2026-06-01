@@ -355,10 +355,8 @@ class _MembersTabState extends State<_MembersTab> {
               TextField(
                 controller: controller,
                 decoration: InputDecoration(
-                  labelText: l10n.searchMembers,
-                  helperText: l10n.searchMembers,
+                  hintText: l10n.searchMembers,
                   border: const OutlineInputBorder(),
-                  floatingLabelBehavior: FloatingLabelBehavior.auto,
                 ),
                 onChanged: (q) async {
                   if (q.trim().isEmpty) {

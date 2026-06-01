@@ -23,9 +23,6 @@
 - **Pull-to-refresh**: Issue detail and PR detail pages now support pull-to-refresh to reload issue/PR details, comments, repo info, subscription status, and reactions
 - **Recent activities infinite scroll**: Dashboard recent activities now auto-load more when scrolling to the bottom (no-sense pagination)
 
-### Changed
-- **Unified input decorations across all pages**: converted all `hintText` to `helperText`, added `floatingLabelBehavior: FloatingLabelBehavior.auto`, and ensured every `TextField`/`TextFormField` has a `labelText` for consistent animated floating labels (27 files affected)
-
 ## [0.34.0] - 2026-05-26
 
 ### Audited

@@ -6,9 +6,6 @@
 - **下拉刷新**：Issue详情和PR详情页面支持下拉刷新，重新加载Issue/PR详情、评论、仓库信息、订阅状态和反应
 - **最近活动无限滚动**：仪表板最近活动现在滚动到底部时自动加载更多（无感分页）
 
-### Changed
-- **统一所有页面输入框样式**：将所有 `hintText` 转换为 `helperText`，添加 `floatingLabelBehavior: FloatingLabelBehavior.auto`，并确保每个 `TextField`/`TextFormField` 都有 `labelText`，以实现一致的动画浮动标签（影响27个文件）
-
 ## [0.34.0] - 2026-05-26
 
 ### Audited

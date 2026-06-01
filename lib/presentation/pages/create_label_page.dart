@@ -271,8 +271,7 @@ class _CreateLabelPageState extends State<CreateLabelPage> {
               controller: _nameController,
               decoration: InputDecoration(
                 labelText: l10n.labelName,
-                helperText: l10n.labelNameHint,
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                hintText: l10n.labelNameHint,
                 border: const OutlineInputBorder(),
               ),
             ),
@@ -281,8 +280,7 @@ class _CreateLabelPageState extends State<CreateLabelPage> {
               controller: _descriptionController,
               decoration: InputDecoration(
                 labelText: l10n.labelDescription,
-                helperText: l10n.labelDescriptionHint,
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                hintText: l10n.labelDescriptionHint,
                 border: const OutlineInputBorder(),
               ),
             ),
@@ -294,8 +292,7 @@ class _CreateLabelPageState extends State<CreateLabelPage> {
                     controller: _colorController,
                     decoration: InputDecoration(
                       labelText: l10n.labelColor,
-                      helperText: l10n.labelColorHint,
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
+                      hintText: l10n.labelColorHint,
                       border: const OutlineInputBorder(),
                       prefixIcon: Container(
                         margin: const EdgeInsets.all(8),

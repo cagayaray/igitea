@@ -106,8 +106,7 @@ class _CreateAdminWebhookPageState extends State<CreateAdminWebhookPage> {
               controller: _urlController,
               decoration: InputDecoration(
                 labelText: l10n.webhookUrl,
-                helperText: l10n.webhookUrlHint,
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                hintText: l10n.webhookUrlHint,
                 border: const OutlineInputBorder(),
               ),
               keyboardType: TextInputType.url,
@@ -117,8 +116,7 @@ class _CreateAdminWebhookPageState extends State<CreateAdminWebhookPage> {
               controller: _secretController,
               decoration: InputDecoration(
                 labelText: l10n.webhookSecret,
-                helperText: l10n.webhookSecretHint,
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                hintText: l10n.webhookSecretHint,
                 border: const OutlineInputBorder(),
               ),
             ),

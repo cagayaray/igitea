@@ -314,10 +314,9 @@ class _LoginPageState extends State<LoginPage>
             controller: _baseUrlController,
             decoration: InputDecoration(
               labelText: l10n.serverUrl,
-              helperText: 'https://gitea.example.com',
+              hintText: 'https://gitea.example.com',
               prefixIcon: const Icon(Icons.dns_outlined),
               border: const OutlineInputBorder(),
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
             ),
             keyboardType: TextInputType.url,
             textInputAction: TextInputAction.next,
@@ -330,10 +329,9 @@ class _LoginPageState extends State<LoginPage>
             controller: _usernameController,
             decoration: InputDecoration(
               labelText: l10n.username,
-              helperText: l10n.enterUsername,
+              hintText: l10n.enterUsername,
               prefixIcon: const Icon(Icons.person_outlined),
               border: const OutlineInputBorder(),
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
             ),
             textInputAction: TextInputAction.next,
             validator: (value) {
@@ -350,10 +348,9 @@ class _LoginPageState extends State<LoginPage>
             controller: _passwordController,
             decoration: InputDecoration(
               labelText: l10n.password,
-              helperText: l10n.enterPassword,
+              hintText: l10n.enterPassword,
               prefixIcon: const Icon(Icons.lock_outlined),
               border: const OutlineInputBorder(),
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
               suffixIcon: IconButton(
                 icon: Icon(
                   _obscurePassword ? Icons.visibility_off : Icons.visibility,
@@ -405,10 +402,9 @@ class _LoginPageState extends State<LoginPage>
             controller: _baseUrlController,
             decoration: InputDecoration(
               labelText: l10n.serverUrl,
-              helperText: 'https://gitea.example.com',
+              hintText: 'https://gitea.example.com',
               prefixIcon: const Icon(Icons.dns_outlined),
               border: const OutlineInputBorder(),
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
             ),
             keyboardType: TextInputType.url,
             textInputAction: TextInputAction.next,
@@ -420,7 +416,7 @@ class _LoginPageState extends State<LoginPage>
             controller: _tokenController,
             decoration: InputDecoration(
               labelText: l10n.token,
-              helperText: l10n.pasteAccessToken,
+              hintText: l10n.pasteAccessToken,
               prefixIcon: const Icon(Icons.key_outlined),
               border: const OutlineInputBorder(),
               suffixIcon: IconButton(
@@ -479,10 +475,9 @@ class _LoginPageState extends State<LoginPage>
             controller: _baseUrlController,
             decoration: InputDecoration(
               labelText: l10n.serverUrl,
-              helperText: 'https://gitea.example.com',
+              hintText: 'https://gitea.example.com',
               prefixIcon: const Icon(Icons.dns_outlined),
               border: const OutlineInputBorder(),
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
             ),
             keyboardType: TextInputType.url,
             textInputAction: TextInputAction.next,
@@ -495,7 +490,6 @@ class _LoginPageState extends State<LoginPage>
             decoration: InputDecoration(
               labelText: l10n.oauth2ClientId,
               border: const OutlineInputBorder(),
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
             ),
             textInputAction: TextInputAction.next,
             validator: (value) {
@@ -527,9 +521,8 @@ class _LoginPageState extends State<LoginPage>
             controller: _oauthRedirectUriController,
             decoration: InputDecoration(
               labelText: l10n.oauth2RedirectUri,
-              helperText: l10n.oauth2RedirectUriHint,
+              hintText: l10n.oauth2RedirectUriHint,
               border: const OutlineInputBorder(),
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
             ),
             textInputAction: TextInputAction.next,
             keyboardType: TextInputType.url,
@@ -555,9 +548,8 @@ class _LoginPageState extends State<LoginPage>
             controller: _oauthCodeController,
             decoration: InputDecoration(
               labelText: l10n.oauth2AuthorizationCode,
-              helperText: l10n.oauth2AuthorizationCodeHint,
+              hintText: l10n.oauth2AuthorizationCodeHint,
               border: const OutlineInputBorder(),
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
             ),
             textInputAction: TextInputAction.done,
             validator: (value) {

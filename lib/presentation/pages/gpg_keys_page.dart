@@ -48,10 +48,8 @@ class _GpgKeysPageState extends State<GpgKeysPage> {
         content: TextField(
           controller: ctrl,
           decoration: InputDecoration(
-            labelText: l10n.gpgKeys,
-            helperText: l10n.gpgKeyHint,
+            hintText: l10n.gpgKeyHint,
             border: const OutlineInputBorder(),
-            floatingLabelBehavior: FloatingLabelBehavior.auto,
           ),
           maxLines: 6,
         ),

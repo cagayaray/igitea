@@ -149,8 +149,7 @@ class _MigrateRepoPageState extends State<MigrateRepoPage> {
                 controller: _cloneAddrController,
                 decoration: InputDecoration(
                   labelText: l10n.cloneUrl,
-                  helperText: 'https://github.com/owner/repo.git',
-                  floatingLabelBehavior: FloatingLabelBehavior.auto,
+                  hintText: 'https://github.com/owner/repo.git',
                   border: const OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.url,
@@ -178,8 +177,7 @@ class _MigrateRepoPageState extends State<MigrateRepoPage> {
                       controller: _repoOwnerController,
                       decoration: InputDecoration(
                         labelText: l10n.repoOwner,
-                        helperText: l10n.personal,
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        hintText: l10n.personal,
                         border: const OutlineInputBorder(),
                       ),
                       textInputAction: TextInputAction.next,
@@ -258,8 +256,7 @@ class _MigrateRepoPageState extends State<MigrateRepoPage> {
                   controller: _mirrorIntervalController,
                   decoration: InputDecoration(
                     labelText: l10n.mirrorInterval,
-                    helperText: '8h',
-                    floatingLabelBehavior: FloatingLabelBehavior.auto,
+                    hintText: '8h',
                     border: const OutlineInputBorder(),
                   ),
                 ),

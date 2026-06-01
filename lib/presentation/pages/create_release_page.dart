@@ -237,11 +237,9 @@ class _CreateReleasePageState extends State<CreateReleasePage> {
         else
           TextField(
             controller: _tagController,
-            decoration: InputDecoration(
-              labelText: l10n.releaseTagName,
-              helperText: 'v1.0.0',
-              border: const OutlineInputBorder(),
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
+            decoration: const InputDecoration(
+              hintText: 'v1.0.0',
+              border: OutlineInputBorder(),
             ),
           ),
       ],

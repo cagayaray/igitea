@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage>
     final username = _usernameController.text.trim();
     final password = _passwordController.text;
 
-    Injection.initialize(
+    Injection.updateAuth(
       baseUrl: baseUrl,
       username: username,
       password: password,
@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage>
     final baseUrl = _baseUrlController.text.trim();
     final token = _tokenController.text.trim();
 
-    Injection.initialize(baseUrl: baseUrl, token: token);
+    Injection.updateAuth(baseUrl: baseUrl, token: token);
     await Injection.authNotifier.loginWithToken(baseUrl, token);
   }
 
@@ -128,6 +128,7 @@ class _LoginPageState extends State<LoginPage>
 
     if (baseUrl.isEmpty || clientId.isEmpty || redirectUri.isEmpty) return;
 
+    Injection.updateAuth(baseUrl: baseUrl);
     await Injection.authNotifier.openOAuth2Authorization(
       baseUrl: baseUrl,
       clientId: clientId,

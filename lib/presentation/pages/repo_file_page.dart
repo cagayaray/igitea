@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/di/injection.dart';
 import '../../core/errors/failures.dart';
+import '../../core/utils/download_guard.dart';
 import '../../core/utils/either.dart';
 import '../../data/models/generated/generated_models.dart';
 import '../../domain/usecases/repo_usecases.dart';
@@ -748,14 +749,12 @@ class _RepoFilePageState extends State<RepoFilePage> {
   Future<void> _downloadFile(BuildContext context) async {
     final l10n = AppLocalizations.of(context)!;
     if (widget.downloadUrl == null) return;
-    final uri = Uri.tryParse(widget.downloadUrl!);
-    if (uri != null) {
-      final success = await launchUrl(uri, mode: LaunchMode.externalApplication);
-      if (!success && context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.failedToOpenDownloadUrl)),
-        );
-      }
+    // SEC-014: warn before downloading dangerous file types
+    final success = await launchDownloadUrl(context, widget.downloadUrl!);
+    if (!success && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.failedToOpenDownloadUrl)),
+      );
     }
   }
 

@@ -183,6 +183,8 @@ class AuthNotifier extends ChangeNotifier {
     await _storage.clear();
     try {
       Injection.apiClient.clearBasicAuth();
+      // SEC-012: purge cached API responses (may contain user data/token lists)
+      Injection.apiClient.clearCache();
     } catch (_) {
       // apiClient may not be initialized in test or early-logout scenarios
     }

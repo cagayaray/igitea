@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'core/di/injection.dart';
 import 'core/storage/auth_method_storage.dart';
@@ -32,9 +33,15 @@ class _IGiteaAppState extends State<IGiteaApp> {
   void initState() {
     super.initState();
     Injection.initialize();
-    _tryRestoreSession().catchError((e) => debugPrint('Session restore error: $e'));
-    Injection.themeNotifier.loadThemeMode().catchError((e) => debugPrint('Theme load error: $e'));
-    Injection.themeNotifier.loadLocale().catchError((e) => debugPrint('Locale load error: $e'));
+    _tryRestoreSession().catchError((e) {
+      if (kDebugMode) debugPrint('Session restore error: $e');
+    });
+    Injection.themeNotifier.loadThemeMode().catchError((e) {
+      if (kDebugMode) debugPrint('Theme load error: $e');
+    });
+    Injection.themeNotifier.loadLocale().catchError((e) {
+      if (kDebugMode) debugPrint('Locale load error: $e');
+    });
   }
 
   Future<void> _tryRestoreSession() async {
@@ -145,7 +152,12 @@ class _IGiteaAppState extends State<IGiteaApp> {
       return MaterialPageRoute(builder: (_) => const StarredReposPage());
     }
 
-    // Parameterized routes
+    // Parameterized routes — require authentication (SEC-010): unauthenticated
+    // users must not reach repo/issue/PR/org/user pages via deep links.
+    if (!Injection.authNotifier.isAuthenticated) {
+      return null;
+    }
+
     final match = _parsePath(path);
     if (match == null) return null;
 

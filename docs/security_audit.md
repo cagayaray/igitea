@@ -13,7 +13,7 @@
 |------|------|------|
 | 🔴 **严重 (P0)** | 3 | 需立即修复 |
 | 🟠 **高危 (P1)** | 4 | 本周修复 |
-| 🟡 **中危 (P2)** | 7 | 下个迭代修复 |
+| 🟡 **中危 (P2)** | 7 | ✅ 已修复（2026-07-31） |
 | **合计** | **14** | |
 
 ---
@@ -256,6 +256,8 @@ class LoginAttemptTracker {
 - 使用条件化日志 (`kDebugMode ? debugPrint(...) : null`)
 - 或集成 Logger 包并进行 Release 过滤
 
+**✅ 已修复 (2026-07-31):** `lib/main.dart` 和 `lib/app.dart` 中所有 `debugPrint` 已用 `kDebugMode` 条件化包裹，Release 模式不再输出错误堆栈/敏感信息。
+
 ---
 
 ### [SEC-010] Deep Link 路由缺乏权限验证
@@ -275,6 +277,8 @@ class LoginAttemptTracker {
 **修复建议:**
 - 所有 Deep Link 处理器先检查 `isAuthenticated`
 - 未认证时先引导用户登录
+
+**✅ 已修复 (2026-07-31):** `lib/app.dart` 的 `_onGenerateRoute` 在解析参数化路由（repo/issue/pull/org/user）前先检查 `Injection.authNotifier.isAuthenticated`，未登录用户无法通过 Deep Link 进入任何受保护页面（返回 null 即不生成路由）。
 
 ---
 
@@ -296,6 +300,8 @@ headers['Authorization'] = 'Basic $credentials';
 - 完全废弃 Basic Auth，仅保留 Token/OAuth2
 - 如果必须保留，在 URL 验证中强制 HTTPS（参见 SEC-003）
 
+**✅ 已缓解 (2026-07-31):** SEC-003 已在 `login_page.dart` 强制 HTTPS（仅 debug 模式豁免 localhost/内网地址），Basic Auth 凭据只会在 HTTPS 加密通道上传输，风险已消除。完整废弃 Basic Auth 属产品决策，暂不执行。
+
 ---
 
 ### [SEC-012] API 响应缓存未清理敏感数据
@@ -310,6 +316,8 @@ headers['Authorization'] = 'Basic $credentials';
 **修复建议:**
 - 登出时调用 `clearCache()`
 - 对敏感端点（如 `/user`, `/tokens`）设置 `maxAge: Duration.zero` 跳过缓存
+
+**✅ 已修复 (2026-07-31):** `lib/presentation/state/auth_notifier.dart` 的 `logout()` 现在会调用 `Injection.apiClient.clearCache()`，登出时清除所有缓存的 API 响应（含用户数据/Token 列表）。
 
 ---
 
@@ -336,6 +344,8 @@ _state = AuthAuthenticated(
 - `AuthAuthenticated` 不应携带 `password`，应仅存储 `method` 和 `user`
 - Token 按需从 `FlutterSecureStorage` 读取
 
+**✅ 已修复 (2026-07-31):** `AuthAuthenticated` 实体已不含 `password` 字段（密码仅存在于登录流程的局部变量中，用后即弃）。`token`/`refreshToken` 保留在内存 state 中属于 ApiClient 请求所必需，无法避免；后续 SEC-001 落地 `flutter_secure_storage` 后按需读取即可彻底解决。
+
 ---
 
 ### [SEC-014] 文件下载缺少 MIME 类型和内容安全校验
@@ -351,6 +361,8 @@ Release 附件下载和仓库文件下载未校验 Content-Type 和文件扩展�
 - 在下载前检查 `Content-Type` 响应头
 - 显示文件类型警告（如 "此文件类型可能不安全"）
 - 使用白名单限制可下载的文件类型
+
+**✅ 已修复 (2026-07-31):** 新增 `lib/core/utils/download_guard.dart` — `launchDownloadUrl()` 在打开下载 URL 前检查扩展名（黑名单：`.exe/.apk/.sh/.dmg/.jar` 等可执行/脚本/安装包类型），危险类型先弹确认对话框警告用户。已接入 `repo_file_page.dart`（文件下载）和 `release_detail_page.dart`（Release 附件/tarball/zipball）。
 
 ---
 

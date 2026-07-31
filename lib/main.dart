@@ -1,12 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'app.dart';
 
 void main() {
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
-    debugPrint('=== FLUTTER ERROR ===');
-    debugPrint('${details.exception}');
-    debugPrint('${details.stack}');
+    if (kDebugMode) {
+      debugPrint('=== FLUTTER ERROR ===');
+      debugPrint('${details.exception}');
+      debugPrint('${details.stack}');
+    }
   };
   ErrorWidget.builder = (details) {
     return Scaffold(

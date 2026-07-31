@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/animations/animated_wrapper.dart';
 import '../../core/constants/ui_constants.dart';
 import '../../core/di/injection.dart';
+import '../../core/utils/download_guard.dart';
 import '../../data/models/generated/generated_models.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/user_avatar.dart';
@@ -26,6 +26,10 @@ class ReleaseDetailPage extends StatefulWidget {
 }
 
 class _ReleaseDetailPageState extends State<ReleaseDetailPage> {
+  // SEC-014: warn before downloading dangerous file types (executables etc.)
+  Future<void> _downloadAsset(String url) =>
+      launchDownloadUrl(context, url);
+
   Future<void> _edit() async {
     final result = await Navigator.push<bool>(
       context,
@@ -217,7 +221,7 @@ class _ReleaseDetailPageState extends State<ReleaseDetailPage> {
                   icon: const Icon(Icons.download),
                   onPressed: () {
                     if (asset.browser_download_url != null) {
-                      launchUrl(Uri.parse(asset.browser_download_url!));
+                      _downloadAsset(asset.browser_download_url!);
                     }
                   },
                 ),
@@ -233,7 +237,7 @@ class _ReleaseDetailPageState extends State<ReleaseDetailPage> {
                 IconButton(
                   icon: const Icon(Icons.archive),
                   tooltip: l10n.tarball,
-                  onPressed: () => launchUrl(Uri.parse(release.tarball_url!)),
+                  onPressed: () => _downloadAsset(release.tarball_url!),
                 ),
                 Text(l10n.tarball),
               ],
@@ -242,7 +246,7 @@ class _ReleaseDetailPageState extends State<ReleaseDetailPage> {
                 IconButton(
                   icon: const Icon(Icons.folder_zip),
                   tooltip: l10n.zipball,
-                  onPressed: () => launchUrl(Uri.parse(release.zipball_url!)),
+                  onPressed: () => _downloadAsset(release.zipball_url!),
                 ),
                 Text(l10n.zipball),
               ],
